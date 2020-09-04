@@ -2,9 +2,9 @@ package recruiters
 
 import (
 	"fmt"
+	"job-scraper/internal"
+	jobs "job-scraper/internal"
 	"regexp"
-	"scraper/internal"
-	jobs "scraper/internal"
 	"strings"
 
 	"go.uber.org/zap"

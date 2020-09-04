@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	jobs "scraper/internal"
+	jobs "job-scraper/internal"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"

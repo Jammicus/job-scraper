@@ -2,8 +2,8 @@ package recruiters
 
 import (
 	"log"
-	"scraper/internal"
-	jobs "scraper/internal"
+	"job-scraper/internal"
+	jobs "job-scraper/internal"
 	"strings"
 
 	"github.com/gocolly/colly"

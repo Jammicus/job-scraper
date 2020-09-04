@@ -3,7 +3,7 @@ package recruiters
 import (
 	"log"
 	"os"
-	jobs "scraper/internal"
+	jobs "job-scraper/internal"
 	"testing"
 
 	"github.com/PuerkitoBio/goquery"

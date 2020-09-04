@@ -2,7 +2,7 @@ package recruiters
 
 import (
 	"log"
-	jobs "scraper/internal"
+	jobs "job-scraper/internal"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

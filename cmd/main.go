@@ -6,7 +6,7 @@ import (
 
 	"go.uber.org/zap"
 
-	recuriters "scraper/internal/recruiters"
+	recuriters "job-scraper/internal/recruiters"
 )
 
 func main() {

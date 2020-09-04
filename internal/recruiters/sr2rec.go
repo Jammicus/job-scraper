@@ -2,10 +2,10 @@ package recruiters
 
 import (
 	"fmt"
+	"job-scraper/internal"
+	jobs "job-scraper/internal"
 	"log"
 	"regexp"
-	"scraper/internal"
-	jobs "scraper/internal"
 	"strings"
 	"sync"
 	"time"

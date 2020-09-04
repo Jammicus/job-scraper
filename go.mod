@@ -1,4 +1,4 @@
-module scraper
+module job-scraper
 
 go 1.15
 
