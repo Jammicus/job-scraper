@@ -1,10 +1,14 @@
-on: [push, pull_request]
+on: 
+  push:
+  pull_request:
+  schedule:
+  - cron: '0 19 * * *'
 name: Build and Test
 jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.13.12, 1.14.4]
+        go-version: [1.14.4, 1.15]
         platform: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -17,4 +21,21 @@ jobs:
     - name: Build Code
       run: go build cmd/main.go
     - name: Test
-      run: go test ./...
+      run: go test ./... -v
+  run:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+    - name: "Checkout code"
+      uses: actions/checkout@v2
+    - name: Run Program
+      run: go run cmd/main.go
+    - name: Upload CSV
+      uses: actions/upload-artifact@v2
+      with:
+        path: jobs.csv
+        if-no-files-found: error 

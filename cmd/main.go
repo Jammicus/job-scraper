@@ -1,15 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"log"
 
-	"go.uber.org/zap"
-
+	csv "job-scraper/internal"
 	recuriters "job-scraper/internal/recruiters"
+
+	"go.uber.org/zap"
 )
 
 func main() {
+	file := flag.String("file", "jobs.csv", "Path to file to store results in")
 	logger, err := zap.NewDevelopment()
 	if err != nil {
 		logger.Fatal("Error starting logger", zap.Error(err))
@@ -19,6 +21,8 @@ func main() {
 
 	sugar.Info("Starting program")
 
+	flag.Parse()
+	sugar.Info("Parsing Flags")
 	understanding := recuriters.Understanding{
 		URL: "https://www.understandingrecruitment.co.uk/jobs/england/?&search%5Bradius%5D=50.0&selected_locations=a-6269131",
 	}
@@ -28,7 +32,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(exampleAgainAgain)
 
 	sr := recuriters.SR2{
 		URL: "https://www.sr2rec.co.uk/jobs/?jf_what=&jf_where=London",
@@ -40,8 +43,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(exampleAgain)
-
 	cs := recuriters.ClientServer{
 		URL: "https://www.client-server.com/jobs/london/",
 	}
@@ -51,6 +52,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(example)
-	sugar.Infof("Starting program: %v", len(exampleAgainAgain)+len(exampleAgain)+len(example))
+	sugar.Infof("Number of Jobs found %v", len(exampleAgainAgain)+len(exampleAgain)+len(example))
+
+	csv.WriteToCSV(*file, exampleAgainAgain, logger)
+	csv.WriteToCSV(*file, exampleAgain, logger)
+	csv.WriteToCSV(*file, example, logger)
+
 }

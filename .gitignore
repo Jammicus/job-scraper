@@ -1,3 +1,4 @@
 companies/
 csv/
 .DS_Store
+*.csv
