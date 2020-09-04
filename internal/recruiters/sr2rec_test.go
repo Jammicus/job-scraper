@@ -1,0 +1,215 @@
+package recruiters
+
+import (
+	"log"
+	"os"
+	"testing"
+
+	jobs "scraper/internal"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/gocolly/colly"
+	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+)
+
+func TestGatherSpecsSR2(t *testing.T) {
+	logger, err := zap.NewDevelopment()
+	defer logger.Sync()
+	sugar := logger.Sugar()
+	if err != nil {
+		sugar.Fatalf("Unable to create logger")
+	}
+	
+	sr := SR2{
+		URL: "",
+	}
+
+	ts := jobs.StartTestServer("../../testdata/recruiters/sr2rec-job.html")
+	defer ts.Close()
+
+	expected := jobs.Job{
+		Title:    "Lead Java Developer – SC Cleared",
+		Type:     "Contract",
+		Salary:   "£400 - £500",
+		Location: "London",
+		URL:      ts.URL + "/job",
+		Requirements: []string{
+			"Java 8+",
+			"RESTful APIs",
+			"Spring",
+			"CI/CD",
+			"Gradle or Maven",
+			"AWS or Azure",
+		},
+	}
+
+	result, err := sr.gatherSpecs(ts.URL+"/job", logger)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, expected, result)
+}
+
+func TestGetJobTypeSR2(t *testing.T) {
+
+	ctx := &colly.Context{}
+	resp := &colly.Response{
+		Request: &colly.Request{
+			Ctx: ctx,
+		},
+		Ctx: ctx,
+	}
+	sr := SR2{
+		URL: "",
+	}
+
+	file, err := os.Open("../../testdata/recruiters/sr2rec-job.html")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(file)
+	sel := "div.wpbb-job-data__wrapper"
+	elements := []*colly.HTMLElement{}
+	i := 0
+	doc.Find(sel).Each(func(_ int, s *goquery.Selection) {
+		for _, n := range s.Nodes {
+			elements = append(elements, colly.NewHTMLElementFromSelectionNode(resp, s, n, i))
+			i++
+		}
+	})
+
+	result, err := sr.getJobType(elements[0])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, "Contract", result)
+}
+
+func TestGetJobLocationSR2(t *testing.T) {
+	ctx := &colly.Context{}
+	resp := &colly.Response{
+		Request: &colly.Request{
+			Ctx: ctx,
+		},
+		Ctx: ctx,
+	}
+	sr := SR2{
+		URL: "",
+	}
+
+	file, err := os.Open("../../testdata/recruiters/sr2rec-job.html")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(file)
+	sel := "div.wpbb-job-data__wrapper"
+	elements := []*colly.HTMLElement{}
+	i := 0
+	doc.Find(sel).Each(func(_ int, s *goquery.Selection) {
+		for _, n := range s.Nodes {
+			elements = append(elements, colly.NewHTMLElementFromSelectionNode(resp, s, n, i))
+			i++
+		}
+	})
+
+	result, err := sr.getJobLocation(elements[0])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, "London", result)
+}
+
+func TestGetJobSalarySR2(t *testing.T) {
+	ctx := &colly.Context{}
+	resp := &colly.Response{
+		Request: &colly.Request{
+			Ctx: ctx,
+		},
+		Ctx: ctx,
+	}
+	sr := SR2{
+		URL: "",
+	}
+
+	file, err := os.Open("../../testdata/recruiters/sr2rec-job.html")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(file)
+	sel := "div.wpbb-job-data__wrapper"
+	elements := []*colly.HTMLElement{}
+	i := 0
+	doc.Find(sel).Each(func(_ int, s *goquery.Selection) {
+		for _, n := range s.Nodes {
+			elements = append(elements, colly.NewHTMLElementFromSelectionNode(resp, s, n, i))
+			i++
+		}
+	})
+
+	result, err := sr.getSalary(elements[0])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, "£400 - £500", result)
+}
+
+func TestGetRequirementsSR2(t *testing.T) {
+	expected := []string{
+		"Java 8+",
+		"RESTful APIs",
+		"Spring",
+		"CI/CD",
+		"Gradle or Maven",
+		"AWS or Azure",
+	}
+	ctx := &colly.Context{}
+	resp := &colly.Response{
+		Request: &colly.Request{
+			Ctx: ctx,
+		},
+		Ctx: ctx,
+	}
+	sr := SR2{
+		URL: "",
+	}
+
+	file, err := os.Open("../../testdata/recruiters/sr2rec-job.html")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(file)
+	sel := "article.single-wpbb_job-content.entry.clr"
+	elements := []*colly.HTMLElement{}
+	i := 0
+	doc.Find(sel).Each(func(_ int, s *goquery.Selection) {
+		for _, n := range s.Nodes {
+			elements = append(elements, colly.NewHTMLElementFromSelectionNode(resp, s, n, i))
+			i++
+		}
+	})
+
+	result, err := sr.getRequirements(elements[0])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, expected, result)
+}

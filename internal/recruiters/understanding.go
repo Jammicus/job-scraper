@@ -1,0 +1,140 @@
+package recruiters
+
+import (
+	"log"
+	"scraper/internal"
+	jobs "scraper/internal"
+	"strings"
+
+	"github.com/gocolly/colly"
+	"go.uber.org/zap"
+)
+
+type Understanding struct {
+	URL string
+}
+
+func (u Understanding) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
+	sugar := logger.Sugar()
+	foundJobs := []jobs.Job{}
+
+	c := colly.NewCollector(
+		colly.Async(true),
+	)
+
+	err := internal.IsUp(u.URL)
+	if err != nil {
+		return nil, err
+	}
+
+	sugar.Debugf("Site %v is accessible", u.URL)
+
+	c.OnHTML("li.job-result-item", func(e *colly.HTMLElement) {
+		e.ForEach("span.job-read-more-link", func(_ int, el *colly.HTMLElement) {
+			link := e.Request.AbsoluteURL(e.ChildAttr("a", "href"))
+			sugar.Infof("Looking for jobs at: %v", link)
+			job, err := u.gatherSpecs(link, logger)
+			if err != nil {
+				sugar.Error(zap.Error(err))
+			}
+			foundJobs = append(foundJobs, job)
+
+		})
+	})
+	c.OnHTML(".next", func(e *colly.HTMLElement) {
+		link := e.Request.AbsoluteURL(e.ChildAttr("a", "href"))
+		sugar.Infof("Next page link found: %v", link)
+		e.Request.Visit(link)
+
+	})
+
+	c.Visit(u.URL)
+	c.Wait()
+
+	return foundJobs, nil
+}
+
+func (u Understanding) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
+
+	sugar := logger.Sugar()
+
+	job := jobs.Job{}
+
+	d := colly.NewCollector(
+		colly.Async(true),
+	)
+
+	d.Visit(url)
+	d.OnRequest(func(r *colly.Request) {
+		sugar.Debug("Visinting page")
+		job.URL = r.URL.String()
+	})
+
+	d.OnHTML("h1", func(e *colly.HTMLElement) {
+		job.Title = e.Text
+
+	})
+
+	d.OnHTML("ul.job-details-list.clearfix", func(e *colly.HTMLElement) {
+		var err error
+
+		job.Location, err = u.getJobLocation(e)
+		if err != nil {
+			sugar.Errorf("Could not get job location %v", zap.Error(err))
+		}
+
+		job.Salary, err = u.getSalary(e)
+		if err != nil {
+			sugar.Errorf("Could not get job salary %v", zap.Error(err))
+		}
+
+		job.Type, err = u.getJobType(e)
+		if err != nil {
+			sugar.Errorf("Could not get job type %v", zap.Error(err))
+		}
+	})
+
+	d.OnHTML("article.clearfix.mb20", func(e *colly.HTMLElement) {
+		var err error
+
+		job.Requirements, err = u.getRequirements(e)
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+
+	d.Wait()
+
+	sugar.Debugf("Job details found %v", job)
+	return job, nil
+}
+
+func (u Understanding) getJobType(e *colly.HTMLElement) (string, error) {
+	jobTypeReplacer := strings.NewReplacer("Job type:", "", "\n", "", "\t", "")
+	jobType := e.ChildText("li.job_type")
+
+	return jobTypeReplacer.Replace(jobType), nil
+}
+
+func (u Understanding) getJobLocation(e *colly.HTMLElement) (string, error) {
+	locationReplacer := strings.NewReplacer("Location", "", "\n", "", "\t", "")
+	location := e.ChildText("li.location")
+
+	return locationReplacer.Replace(location), nil
+}
+
+func (u Understanding) getSalary(e *colly.HTMLElement) (string, error) {
+
+	salaryReplacer := strings.NewReplacer("Salary:", "", "\n", "", "\t", "")
+	salary := e.ChildText("li.job_salary")
+	return salaryReplacer.Replace(salary), nil
+}
+
+func (u Understanding) getRequirements(e *colly.HTMLElement) ([]string, error) {
+	requirements := []string{}
+	e.ForEach("li", func(_ int, el *colly.HTMLElement) {
+		// requirements one at a time
+		requirements = append(requirements, el.Text)
+	})
+	return requirements, nil
+}
