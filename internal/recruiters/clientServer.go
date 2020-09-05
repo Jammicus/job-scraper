@@ -96,7 +96,7 @@ func (cs ClientServer) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 
 	d.Visit(url)
 	d.OnRequest(func(r *colly.Request) {
-		sugar.Debugf("Visiting page %v", zap.String("url", r.URL.String()))
+		sugar.Debugf("Visiting page %v", r.URL.String())
 		job.URL = r.URL.String()
 	})
 

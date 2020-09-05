@@ -18,6 +18,12 @@ func WriteToCSV(j FindJobs, logger *zap.Logger) error {
 	if err != nil {
 		sugar.Fatal(err)
 	}
+
+	fInfo, err := file.Stat()
+
+	if err != nil {
+		sugar.Fatal(err)
+	}
 	defer file.Close()
 
 	sugar.Infof("Using file")
@@ -25,12 +31,24 @@ func WriteToCSV(j FindJobs, logger *zap.Logger) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
+	if fInfo.Size() == 0 {
+		headings := [][]string{{"Title", "Job Type", "Salary", "Location", "URL", "Requirements"}}
+		sugar.Infof("Writing headings to file %v", fInfo.Name())
+		if err = writer.WriteAll(headings); err != nil {
+			sugar.Fatal(err)
+
+		}
+		sugar.Infof("Finished writing headings to file %v", fInfo.Name())
+	}
+
 	content := createContent(j.GetJobs(logger), logger)
-	sugar.Infof("Writing content to file")
+	sugar.Infof("Writing content to file %v", fInfo.Name())
 	if err = writer.WriteAll(content); err != nil {
 		sugar.Fatal(err)
+
 	}
-	sugar.Infof("Finished writing content to file")
+	sugar.Infof("Finished writing content to file %v", fInfo.Name())
+
 	return nil
 }
 
