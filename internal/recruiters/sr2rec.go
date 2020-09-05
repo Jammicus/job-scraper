@@ -2,7 +2,6 @@ package recruiters
 
 import (
 	"fmt"
-	"job-scraper/internal"
 	jobs "job-scraper/internal"
 	"log"
 	"regexp"
@@ -50,7 +49,7 @@ func (sr *SR2) findJobs(logger *zap.Logger) {
 		colly.Async(true),
 	)
 
-	err := internal.IsUp(sr.URL)
+	err := jobs.IsUp(sr.URL)
 	if err != nil {
 		sugar.Fatal(err)
 	}
@@ -106,7 +105,7 @@ func (sr SR2) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 	d.Visit(url)
 
 	d.OnRequest(func(r *colly.Request) {
-		sugar.Debug("Visinting page")
+		sugar.Debugf("Visiting page %v", zap.String("url", r.URL.String()))
 		job.URL = r.URL.String()
 	})
 

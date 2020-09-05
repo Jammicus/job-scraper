@@ -9,7 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// trim the spaces
+// TODO: Trim the spaces
 func TestGatherSpecsClientServer(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
@@ -28,7 +28,7 @@ func TestGatherSpecsClientServer(t *testing.T) {
 		Title:    "Lead JavaScript Developer - React TypeScript",
 		Type:     "Permanent",
 		Salary:   "£70000 - £95000",
-		Location: " London, England,    ",
+		Location: "London, England,",
 		URL:      ts.URL + "/job",
 		Requirements: []string{
 			"You have strong commercial experience as a Front End Developer with all of the following: JavaScript, React, Redux and TypeScript ",

@@ -2,7 +2,6 @@ package recruiters
 
 import (
 	"fmt"
-	"job-scraper/internal"
 	jobs "job-scraper/internal"
 	"regexp"
 	"strings"
@@ -13,7 +12,7 @@ import (
 	"github.com/gocolly/colly"
 )
 
-// CLient servers page is a mass of text only.
+// Client servers page is a mass of text only.
 
 var jobType = regexp.MustCompile(`^Job Type:`)
 var jobDetails = regexp.MustCompile(`£[0-9]+ - £[0-9]+`)
@@ -51,7 +50,7 @@ func (cs *ClientServer) findJobs(logger *zap.Logger) {
 		colly.Async(true),
 	)
 
-	err := internal.IsUp(cs.URL)
+	err := jobs.IsUp(cs.URL)
 	if err != nil {
 		sugar.Fatal(err)
 	}
@@ -97,7 +96,7 @@ func (cs ClientServer) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 
 	d.Visit(url)
 	d.OnRequest(func(r *colly.Request) {
-		sugar.Debug("Visinting page")
+		sugar.Debugf("Visiting page %v", zap.String("url", r.URL.String()))
 		job.URL = r.URL.String()
 	})
 
@@ -148,13 +147,13 @@ func (cs ClientServer) getJobType(s string) (string, error) {
 func (cs ClientServer) getJobLocation(s string) (string, error) {
 	location := jobDetails.Split(s, -1)[0]
 
-	return location, nil
+	return strings.TrimSpace(location), nil
 }
 
 func (cs ClientServer) getSalary(s string) (string, error) {
 	salary := jobDetails.FindStringSubmatch(s)[0]
 
-	return salary, nil
+	return strings.TrimSpace(salary), nil
 }
 
 func (cs ClientServer) getRequirements(el *colly.HTMLElement) ([]string, error) {
