@@ -1,9 +1,9 @@
 package recruiters
 
 import (
+	jobs "job-scraper/internal"
 	"log"
 	"os"
-	jobs "job-scraper/internal"
 	"testing"
 
 	"github.com/PuerkitoBio/goquery"
@@ -20,11 +20,12 @@ func TestGatherSpecsUnderstanding(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	understanding := Understanding{}
-
 	ts := jobs.StartTestServer("../../testdata/recruiters/understanding-job.html")
 	defer ts.Close()
 
+	understanding := Understanding{
+		URL: ts.URL + "/job",
+	}
 	expected := jobs.Job{
 		Title:    "DevOps Engineer (Green Energy)",
 		Type:     "Permanent",
@@ -39,7 +40,7 @@ func TestGatherSpecsUnderstanding(t *testing.T) {
 		},
 	}
 
-	result, err := understanding.gatherSpecs(ts.URL+"/job", logger)
+	result, err := understanding.gatherSpecs(understanding.GetURL(), logger)
 
 	if err != nil {
 		log.Fatal(err)

@@ -1,8 +1,8 @@
 package recruiters
 
 import (
-	"log"
 	jobs "job-scraper/internal"
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,13 +17,13 @@ func TestGatherSpecsClientServer(t *testing.T) {
 	if err != nil {
 		sugar.Fatalf("Unable to create logger")
 	}
-	cs := ClientServer{
-		URL: "",
-	}
 
 	ts := jobs.StartTestServer("../../testdata/recruiters/clientserver-job.html")
 	defer ts.Close()
 
+	cs := ClientServer{
+		URL: ts.URL + "/job",
+	}
 	expected := jobs.Job{
 		Title:    "Lead JavaScript Developer - React TypeScript",
 		Type:     "Permanent",

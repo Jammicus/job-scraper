@@ -20,10 +20,30 @@ var jobDetails = regexp.MustCompile(`£[0-9]+ - £[0-9]+`)
 var jobRequirements = regexp.MustCompile(`Requirements:\s*?[*]`)
 
 type ClientServer struct {
-	URL string
+	URL      string
+	Jobs     []jobs.Job
+	FilePath string
 }
 
-func (cs ClientServer) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
+func (cs ClientServer) GetJobs(logger *zap.Logger) []jobs.Job {
+	if len(cs.Jobs) == 0 {
+		sugar := logger.Sugar()
+		sugar.Info("Jobs have not previously been found, finding jobs.")
+		cs.findJobs(logger)
+	}
+	cs.findJobs(logger)
+	return cs.Jobs
+}
+
+func (cs ClientServer) GetURL() string {
+	return cs.URL
+}
+
+func (cs ClientServer) GetPath() string {
+	return cs.FilePath
+}
+
+func (cs *ClientServer) findJobs(logger *zap.Logger) {
 	sugar := logger.Sugar()
 	foundJobs := []jobs.Job{}
 
@@ -33,7 +53,7 @@ func (cs ClientServer) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
 
 	err := internal.IsUp(cs.URL)
 	if err != nil {
-		return nil, err
+		sugar.Fatal(err)
 	}
 
 	sugar.Debugf("Site %v is accessible", cs.URL)
@@ -59,7 +79,7 @@ func (cs ClientServer) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
 	c.Visit(cs.URL)
 	c.Wait()
 
-	return foundJobs, nil
+	cs.Jobs = foundJobs
 }
 
 func (cs ClientServer) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {

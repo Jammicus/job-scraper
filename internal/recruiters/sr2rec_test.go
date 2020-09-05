@@ -20,14 +20,13 @@ func TestGatherSpecsSR2(t *testing.T) {
 	if err != nil {
 		sugar.Fatalf("Unable to create logger")
 	}
-	
-	sr := SR2{
-		URL: "",
-	}
 
 	ts := jobs.StartTestServer("../../testdata/recruiters/sr2rec-job.html")
 	defer ts.Close()
 
+	sr := SR2{
+		URL: ts.URL + "/job",
+	}
 	expected := jobs.Job{
 		Title:    "Lead Java Developer – SC Cleared",
 		Type:     "Contract",
@@ -44,7 +43,7 @@ func TestGatherSpecsSR2(t *testing.T) {
 		},
 	}
 
-	result, err := sr.gatherSpecs(ts.URL+"/job", logger)
+	result, err := sr.gatherSpecs(sr.GetURL(), logger)
 
 	if err != nil {
 		log.Fatal(err)

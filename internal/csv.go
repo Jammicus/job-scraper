@@ -8,11 +8,12 @@ import (
 	"go.uber.org/zap"
 )
 
-func WriteToCSV(path string, jobs []Job, logger *zap.Logger) error {
+// WriteToCSV takes a file path, a list of jobs and a logging instance and writes those jobs to the file at the path provided
+func WriteToCSV(j FindJobs, logger *zap.Logger) error {
 	sugar := logger.Sugar()
 
 	// create if does not exist, otherwise append
-	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(j.GetPath(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
 		sugar.Fatal(err)
@@ -24,7 +25,7 @@ func WriteToCSV(path string, jobs []Job, logger *zap.Logger) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	content := createContent(jobs, logger)
+	content := createContent(j.GetJobs(logger), logger)
 	sugar.Infof("Writing content to file")
 	if err = writer.WriteAll(content); err != nil {
 		sugar.Fatal(err)

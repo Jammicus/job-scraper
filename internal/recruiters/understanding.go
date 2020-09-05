@@ -1,9 +1,9 @@
 package recruiters
 
 import (
-	"log"
 	"job-scraper/internal"
 	jobs "job-scraper/internal"
+	"log"
 	"strings"
 
 	"github.com/gocolly/colly"
@@ -11,10 +11,29 @@ import (
 )
 
 type Understanding struct {
-	URL string
+	URL      string
+	Jobs     []jobs.Job
+	FilePath string
 }
 
-func (u Understanding) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
+func (u Understanding) GetJobs(logger *zap.Logger) []jobs.Job {
+	if len(u.Jobs) == 0 {
+		sugar := logger.Sugar()
+		sugar.Info("Jobs have not previously been found, finding jobs.")
+		u.findJobs(logger)
+	}
+	return u.Jobs
+}
+
+func (u Understanding) GetURL() string {
+	return u.URL
+}
+
+func (u Understanding) GetPath() string {
+	return u.FilePath
+}
+
+func (u *Understanding) findJobs(logger *zap.Logger) {
 	sugar := logger.Sugar()
 	foundJobs := []jobs.Job{}
 
@@ -24,7 +43,7 @@ func (u Understanding) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
 
 	err := internal.IsUp(u.URL)
 	if err != nil {
-		return nil, err
+		sugar.Fatal(err)
 	}
 
 	sugar.Debugf("Site %v is accessible", u.URL)
@@ -51,7 +70,8 @@ func (u Understanding) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
 	c.Visit(u.URL)
 	c.Wait()
 
-	return foundJobs, nil
+	u.Jobs = foundJobs
+
 }
 
 func (u Understanding) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {

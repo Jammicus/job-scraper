@@ -17,12 +17,31 @@ import (
 var srURL = "https://www.sr2rec.co.uk/jobs/?jf_what=&jf_where=London"
 
 type SR2 struct {
-	URL string
+	URL      string
+	Jobs     []jobs.Job
+	FilePath string
 }
 
 var mutex = sync.Mutex{}
 
-func (sr SR2) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
+func (sr SR2) GetJobs(logger *zap.Logger) []jobs.Job {
+	if len(sr.Jobs) == 0 {
+		sugar := logger.Sugar()
+		sugar.Info("Jobs have not previously been found, finding jobs.")
+		sr.findJobs(logger)
+	}
+	return sr.Jobs
+}
+
+func (sr SR2) GetURL() string {
+	return sr.URL
+}
+
+func (sr SR2) GetPath() string {
+	return sr.FilePath
+}
+
+func (sr *SR2) findJobs(logger *zap.Logger) {
 	sugar := logger.Sugar()
 
 	foundJobs := []jobs.Job{}
@@ -33,7 +52,7 @@ func (sr SR2) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
 
 	err := internal.IsUp(sr.URL)
 	if err != nil {
-		return nil, err
+		sugar.Fatal(err)
 	}
 
 	sugar.Debugf("Site %v is accessible", sr.URL)
@@ -67,7 +86,8 @@ func (sr SR2) FindJobs(logger *zap.Logger) ([]jobs.Job, error) {
 	c.Visit(sr.URL)
 	c.Wait()
 
-	return foundJobs, nil
+	sr.Jobs = foundJobs
+
 }
 
 func (sr SR2) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {

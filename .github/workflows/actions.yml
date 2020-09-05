@@ -37,5 +37,5 @@ jobs:
     - name: Upload CSV
       uses: actions/upload-artifact@v2
       with:
-        path: jobs.csv
+        path: *.csv
         if-no-files-found: error 

@@ -2,10 +2,11 @@ package internal
 
 import "go.uber.org/zap"
 
-// Each site should implement this
-// *Logger
+// Think about how to reduce the size of this interface
 type FindJobs interface {
-	Scrape(*zap.Logger) ([]Job, error)
+	GetURL() string
+	GetJobs(*zap.Logger) []Job
+	GetPath() string
 }
 
 type Job struct {
