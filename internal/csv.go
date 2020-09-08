@@ -57,7 +57,7 @@ func createContent(jobs []Job, logger *zap.Logger) [][]string {
 
 	sugar := logger.Sugar()
 	for _, job := range jobs {
-		values := []string{job.Title, job.Title, job.Salary, job.Location, job.URL, strings.Join(job.Requirements[:], ",")}
+		values := []string{job.Title, job.Type, job.Salary, job.Location, job.URL, strings.Join(job.Requirements[:], ",")}
 		sugar.Debugf("Entry created with values %v", values)
 		content = append(content, values)
 	}
