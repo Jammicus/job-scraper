@@ -1,6 +1,8 @@
 package internal
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+)
 
 // Think about how to reduce the size of this interface
 type FindJobs interface {
@@ -16,4 +18,10 @@ type Job struct {
 	Location     string
 	URL          string
 	Requirements []string
+}
+
+type JobSource struct {
+	URL      string
+	Jobs     []Job
+	FilePath string
 }

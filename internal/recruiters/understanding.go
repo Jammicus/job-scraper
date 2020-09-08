@@ -9,11 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type Understanding struct {
-	URL      string
-	Jobs     []jobs.Job
-	FilePath string
-}
+type Understanding jobs.JobSource
 
 func (u Understanding) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(u.Jobs) == 0 {

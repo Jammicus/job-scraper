@@ -18,11 +18,7 @@ var jobType = regexp.MustCompile(`^Job Type:`)
 var jobDetails = regexp.MustCompile(`£[0-9]+ - £[0-9]+`)
 var jobRequirements = regexp.MustCompile(`Requirements:\s*?[*]`)
 
-type ClientServer struct {
-	URL      string
-	Jobs     []jobs.Job
-	FilePath string
-}
+type ClientServer jobs.JobSource
 
 func (cs ClientServer) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(cs.Jobs) == 0 {

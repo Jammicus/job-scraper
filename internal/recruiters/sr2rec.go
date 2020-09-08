@@ -15,11 +15,7 @@ import (
 
 var srURL = "https://www.sr2rec.co.uk/jobs/?jf_what=&jf_where=London"
 
-type SR2 struct {
-	URL      string
-	Jobs     []jobs.Job
-	FilePath string
-}
+type SR2 jobs.JobSource
 
 var mutex = sync.Mutex{}
 

@@ -16,7 +16,6 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/temoto/robotstxt v1.1.1 // indirect
 	go.uber.org/zap v1.16.0
-	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
+	google.golang.org/api v0.31.0
 	google.golang.org/appengine v1.6.6 // indirect
-	google.golang.org/protobuf v1.24.0 // indirect
 )
