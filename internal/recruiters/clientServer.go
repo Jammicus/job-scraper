@@ -26,7 +26,6 @@ func (cs ClientServer) GetJobs(logger *zap.Logger) []jobs.Job {
 		sugar.Info("Jobs have not previously been found, finding jobs.")
 		cs.findJobs(logger)
 	}
-	cs.findJobs(logger)
 	return cs.Jobs
 }
 
