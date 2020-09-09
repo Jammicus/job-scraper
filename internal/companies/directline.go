@@ -96,7 +96,7 @@ func (dr DirectLine) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, erro
 
 	})
 
-	d.OnHTML("div.job-container ", func(e *colly.HTMLElement) {
+	d.OnHTML("div.job-container", func(e *colly.HTMLElement) {
 
 		job.Requirements, err = dr.getRequirements(e)
 		if err != nil {
@@ -119,7 +119,7 @@ func (dr DirectLine) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, erro
 		}
 	})
 
-	// Doesnt tell use salary
+	// Doesnt tell us salary on their job pages.
 	job.Salary = "N/A"
 	d.Wait()
 
@@ -144,7 +144,7 @@ func (dr DirectLine) getJobType(e *colly.HTMLElement) (string, error) {
 
 	jobType := ""
 	e.ForEach("div.copy", func(i int, el *colly.HTMLElement) {
-		if i < 2 {
+		if i < 1 {
 
 			jobType = jobType + el.Text
 		}
