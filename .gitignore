@@ -1,4 +1,12 @@
-companies/
 csv/
 .DS_Store
 *.csv
+
+# Companies
+
+testdata/companies
+internal/companies/amazon.go
+internal/companies/apple.go
+internal/companies/google.go
+internal/companies/hasicorp.go
+internal/companies/jp.go

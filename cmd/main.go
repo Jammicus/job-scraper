@@ -2,6 +2,7 @@ package main
 
 import (
 	csv "job-scraper/internal"
+	companies "job-scraper/internal/companies"
 	recuriters "job-scraper/internal/recruiters"
 
 	"go.uber.org/zap"
@@ -32,6 +33,12 @@ func main() {
 		FilePath: "clientServer.csv",
 	}
 
+	dr := companies.DirectLine{
+		URL:      "https://www.directlinegroupcareers.com/search-apply/?jobcategory=ca77d4d22fb7013e872107cf18d65905&location=&keywords=&sortby=fj&distance=50&resultsperpage=12",
+		FilePath: "directLine.csv",
+	}
+
+	csv.WriteToCSV(dr, logger)
 	csv.WriteToCSV(understanding, logger)
 	csv.WriteToCSV(sr, logger)
 	csv.WriteToCSV(cs, logger)
