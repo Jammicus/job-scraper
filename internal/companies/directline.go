@@ -99,15 +99,24 @@ func (dr DirectLine) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, erro
 	d.OnHTML("div.job-container ", func(e *colly.HTMLElement) {
 
 		job.Requirements, err = dr.getRequirements(e)
+		if err != nil {
+			sugar.Errorf("Error geting job requiremnts %v", zap.Error(err))
+		}
 
 	})
 	d.OnHTML("div.location.map-ico-black", func(e *colly.HTMLElement) {
 		job.Location, err = dr.getJobLocation(e)
+		if err != nil {
+			sugar.Errorf("Error geting job location %v", zap.Error(err))
+		}
 	})
 
 	// Not returning job type
 	d.OnHTML("div.hero-box__details", func(e *colly.HTMLElement) {
 		job.Type, err = dr.getJobType(e)
+		if err != nil {
+			sugar.Errorf("Error geting job type %v", zap.Error(err))
+		}
 	})
 
 	// Doesnt tell use salary
