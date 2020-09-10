@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func TestGatherSpecsSR2(t *testing.T) {
+func TestGatherSpecsDirectline(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
 	sugar := logger.Sugar()
@@ -57,7 +57,7 @@ func TestGatherSpecsSR2(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
-func TestGetJobTypeSR2(t *testing.T) {
+func TestGetJobTypeDirectline(t *testing.T) {
 
 	ctx := &colly.Context{}
 	resp := &colly.Response{
@@ -96,7 +96,7 @@ func TestGetJobTypeSR2(t *testing.T) {
 	assert.Equal(t, "Permanent", result)
 }
 
-func TestGetJobLocationSR2(t *testing.T) {
+func TestGetJobLocationDirectline(t *testing.T) {
 	ctx := &colly.Context{}
 	resp := &colly.Response{
 		Request: &colly.Request{
@@ -134,7 +134,7 @@ func TestGetJobLocationSR2(t *testing.T) {
 	assert.Equal(t, "Churchill Court, Bromley, BR1 1DP", result)
 }
 
-func TestGetRequirementsSR2(t *testing.T) {
+func TestGetRequirementsDirectline(t *testing.T) {
 	expected := []string{
 		"Providing your expertise to build core services to be consumed by Projects (e.g. landing zones, Security controls, governance automation & Core networking) to cloud best practice.",
 		"Liaising with projects to help them consume services in an appropriate and governed manner",

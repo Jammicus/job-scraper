@@ -38,6 +38,12 @@ func main() {
 		FilePath: "directLine.csv",
 	}
 
+	hs := companies.Hashicorp{
+		URL:      "https://www.hashicorp.com/jobs/engineering",
+		FilePath: "hashiCorp.csv",
+	}
+	csv.WriteToCSV(hs, logger)
+
 	csv.WriteToCSV(dr, logger)
 	csv.WriteToCSV(understanding, logger)
 	csv.WriteToCSV(sr, logger)
