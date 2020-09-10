@@ -48,8 +48,14 @@ func main() {
 		FilePath: "amazon.csv",
 	}
 
-	csv.WriteToCSV(a, logger)
+	ap := companies.Apple{
+		URL:      "https://jobs.apple.com/en-gb/search?location=united-kingdom-GBR&team=apps-and-frameworks-SFTWR-AF+cloud-and-infrastructure-SFTWR-CLD+core-operating-systems-SFTWR-COS+devops-and-site-reliability-SFTWR-DSR+engineering-project-management-SFTWR-EPM+information-systems-and-technology-SFTWR-ISTECH+machine-learning-and-ai-SFTWR-MCHLN+security-and-privacy-SFTWR-SEC+software-quality-automation-and-tools-SFTWR-SQAT+wireless-software-SFTWR-WSFT",
+		FilePath: "apple.csv",
+	}
 
+	csv.WriteToCSV(ap, logger)
+
+	csv.WriteToCSV(a, logger)
 	csv.WriteToCSV(hs, logger)
 	csv.WriteToCSV(dr, logger)
 	csv.WriteToCSV(understanding, logger)

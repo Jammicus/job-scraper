@@ -1,0 +1,144 @@
+package companies
+
+import (
+	jobs "job-scraper/internal"
+	"log"
+	"os"
+	"testing"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/gocolly/colly"
+	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+)
+
+func TestGatherSpecsApple(t *testing.T) {
+	logger, err := zap.NewDevelopment()
+	defer logger.Sync()
+	sugar := logger.Sugar()
+	if err != nil {
+		sugar.Fatalf("Unable to create logger")
+	}
+
+	ts := jobs.StartTestServer("../../testdata/companies/apple-job.html")
+	defer ts.Close()
+
+	a := Apple{
+		URL: ts.URL + "/job",
+	}
+	expected := jobs.Job{
+		Title:    "AI/ML - Software Engineer (Python, Spark) - ML Platform & Technologies",
+		Type:     "N/A",
+		Salary:   "N/A",
+		Location: "Cambridge, Cambridgeshire, United Kingdom",
+		URL:      ts.URL + "/job",
+		Requirements: []string{
+			"Experience building applications/services with Python / Java / Scala",
+			"Strong background in building scalable and fault-tolerant distributed systems, particularly in realtime environments.",
+			"Experience in building data pipelines, data caching/storage systems, and/or RPC services.",
+			"Data technologies, eg Spark, Hadoop, Kafka",
+			"Microservices architecture",
+			"SQL / NoSQL databases",
+			"Strong understanding of data structures & algorithms",
+			"Excellent problem solving and debugging skills",
+			"Strong written and verbal communication skills",
+			"Experience with Javascript and UI frameworks/libraries like Ember, Angular, React, D3",
+		},
+	}
+
+	result, err := a.gatherSpecs(a.GetURL(), logger)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, expected, result)
+}
+
+func TestGetJobLocationApple(t *testing.T) {
+	ctx := &colly.Context{}
+	resp := &colly.Response{
+		Request: &colly.Request{
+			Ctx: ctx,
+		},
+		Ctx: ctx,
+	}
+	a := Apple{
+		URL: "",
+	}
+
+	file, err := os.Open("../../testdata/companies/apple-job.html")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(file)
+	sel := "#job-location-name"
+	elements := []*colly.HTMLElement{}
+	i := 0
+	doc.Find(sel).Each(func(_ int, s *goquery.Selection) {
+		for _, n := range s.Nodes {
+			elements = append(elements, colly.NewHTMLElementFromSelectionNode(resp, s, n, i))
+			i++
+		}
+	})
+
+	result, err := a.getJobLocation(elements[0])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, "Cambridge, Cambridgeshire, United Kingdom", result)
+}
+
+func TestGetRequirementsApple(t *testing.T) {
+	expected := []string{
+		"Experience building applications/services with Python / Java / Scala",
+		"Strong background in building scalable and fault-tolerant distributed systems, particularly in realtime environments.",
+		"Experience in building data pipelines, data caching/storage systems, and/or RPC services.",
+		"Data technologies, eg Spark, Hadoop, Kafka",
+		"Microservices architecture",
+		"SQL / NoSQL databases",
+		"Strong understanding of data structures & algorithms",
+		"Excellent problem solving and debugging skills",
+		"Strong written and verbal communication skills",
+		"Experience with Javascript and UI frameworks/libraries like Ember, Angular, React, D3",
+	}
+	ctx := &colly.Context{}
+	resp := &colly.Response{
+		Request: &colly.Request{
+			Ctx: ctx,
+		},
+		Ctx: ctx,
+	}
+	a := Apple{
+		URL: "",
+	}
+
+	file, err := os.Open("../../testdata/companies/apple-job.html")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(file)
+	sel := "#accordion_keyqualifications"
+	elements := []*colly.HTMLElement{}
+	i := 0
+	doc.Find(sel).Each(func(_ int, s *goquery.Selection) {
+		for _, n := range s.Nodes {
+			elements = append(elements, colly.NewHTMLElementFromSelectionNode(resp, s, n, i))
+			i++
+		}
+	})
+
+	result, err := a.getRequirements(elements[0])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, expected, result)
+}

@@ -6,7 +6,6 @@ import (
 	"log"
 	"regexp"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gocolly/colly"
@@ -16,8 +15,6 @@ import (
 var srURL = "https://www.sr2rec.co.uk/jobs/?jf_what=&jf_where=London"
 
 type SR2 jobs.JobSource
-
-var mutex = sync.Mutex{}
 
 func (sr SR2) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(sr.Jobs) == 0 {

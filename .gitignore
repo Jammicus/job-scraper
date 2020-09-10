@@ -4,7 +4,5 @@ csv/
 main
 # Companies
 
-internal/companies/apple.go
 internal/companies/google.go
-internal/companies/hasicorp.go
 internal/companies/jp.go
