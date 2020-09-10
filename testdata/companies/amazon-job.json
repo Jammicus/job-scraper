@@ -1,0 +1,274 @@
+{
+    "error": null,
+    "hits": 706,
+    "facets": {
+        "location_facet": [
+            {
+                "UK, London": 704
+            },
+            {
+                "UK, East London": 2
+            }
+        ],
+        "business_category_facet": [
+            {
+                "aws": 279
+            },
+            {
+                "transportation-and-logistics": 64
+            },
+            {
+                "finance": 45
+            },
+            {
+                "retail": 43
+            },
+            {
+                "advertising": 34
+            },
+            {
+                "alexa": 32
+            },
+            {
+                "operations": 31
+            },
+            {
+                "global-corporate": 22
+            },
+            {
+                "fulfillment-and-operations": 21
+            },
+            {
+                "no-business-category": 18
+            },
+            {
+                "primevideo": 17
+            },
+            {
+                "seller-services": 15
+            },
+            {
+                "amazondevices": 12
+            },
+            {
+                "digital-entertainment": 12
+            },
+            {
+                "fulfillment-ops": 12
+            },
+            {
+                "legal": 11
+            },
+            {
+                "consumerpayments": 8
+            },
+            {
+                "studentprograms": 5
+            },
+            {
+                "business-and-corporate-development": 4
+            },
+            {
+                "consumer_engagement": 3
+            },
+            {
+                "ecp": 3
+            },
+            {
+                "kindlecontent": 3
+            },
+            {
+                "subsidiaries": 3
+            },
+            {
+                "amazon-customer-service": 2
+            },
+            {
+                "customer-trust-and-partner-support": 2
+            },
+            {
+                "public-relations-and-public-policy": 2
+            },
+            {
+                "amazon-books": 1
+            },
+            {
+                "customer-service": 1
+            }
+        ],
+        "category_facet": [
+            {
+                "Solutions Architect": 149
+            },
+            {
+                "Project/Program/Product Management--Non-Tech": 89
+            },
+            {
+                "Sales, Advertising, \u0026 Account Management": 78
+            },
+            {
+                "Business \u0026 Merchant Development": 66
+            },
+            {
+                "Finance \u0026 Accounting": 41
+            },
+            {
+                "Business Intelligence": 33
+            },
+            {
+                "Software Development": 32
+            },
+            {
+                "Project/Program/Product Management--Technical": 31
+            },
+            {
+                "Marketing \u0026 PR": 26
+            },
+            {
+                "Fulfillment \u0026 Operations Management": 20
+            },
+            {
+                "Buying, Planning, \u0026 Instock Management": 17
+            },
+            {
+                "Supply Chain/Transportation Management": 17
+            },
+            {
+                "Operations, IT, \u0026 Support Engineering": 16
+            },
+            {
+                "Human Resources": 14
+            },
+            {
+                "Systems, Quality, \u0026 Security Engineering": 12
+            },
+            {
+                "Legal": 11
+            },
+            {
+                "Corporate Operations": 9
+            },
+            {
+                "Investigation \u0026 Loss Prevention": 9
+            },
+            {
+                "Data Science": 5
+            },
+            {
+                "Design": 5
+            },
+            {
+                "Customer Service": 4
+            },
+            {
+                "Editorial, Writing, \u0026 Content Management": 4
+            },
+            {
+                "Administrative Support": 3
+            },
+            {
+                "Leadership Development \u0026 Training": 3
+            },
+            {
+                "Machine Learning Science": 3
+            },
+            {
+                "Economics": 2
+            },
+            {
+                "Facilities, Maintenance, \u0026 Real Estate": 2
+            },
+            {
+                "Public Policy": 2
+            },
+            {
+                "Research Science": 2
+            },
+            {
+                "Hardware Development": 1
+            }
+        ],
+        "schedule_type_id_facet": [
+            {
+                "Full-Time": 706
+            }
+        ],
+        "employee_class_facet": [
+            {
+                "Regular Full Time": 686
+            },
+            {
+                "Fixed Term Contractor - Eu": 17
+            },
+            {
+                "Intern": 3
+            }
+        ],
+        "normalized_location_facet": [
+            {
+                "London, England, GBR": 706
+            }
+        ],
+        "job_function_id_facet": [
+            {
+                "job_function_corporate_80rdb4": 668
+            },
+            {
+                "job_function_fulfillment_center_mn2kd4": 33
+            },
+            {
+                "job_function_customer_service_fpzyxo": 5
+            }
+        ]
+    },
+    "jobs": [
+        {
+            "basic_qualifications": "Bachelor’s degree, or equivalent experience, in Computer Science, Engineering, Mathematics or a related field\u003cbr/\u003e8+ years of experience of IT platform implementation in a highly technical and analytical role.\u003cbr/\u003e5+ years’ experience of Data Lake/Hadoop platform implementation, including 3+ years of hands-on experience in implementation and performance tuning Hadoop/Spark implementations\u003cbr/\u003eAbility to think strategically about business, product, and technical challenges in an enterprise environment.\u003cbr/\u003eExperience with analytic solutions applied to the Marketing or Risk needs of enterprises\u003cbr/\u003eHighly technical and analytical, possessing 5 or more years of IT platform implementation experience.\u003cbr/\u003eUnderstanding of Apache Hadoop and the Hadoop ecosystem. Experience with one or more relevant tools (Sqoop, Flume, Kafka, Oozie, Hue, Zookeeper, HCatalog, Solr, Avro).\u003cbr/\u003eFamiliarity with one or more SQL-on-Hadoop technology (Hive, Impala, Spark SQL, Presto).\u003cbr/\u003eExperience developing software code in one or more programming languages (Java, JavaScript, Python, etc).\u003cbr/\u003e\u003cbr/\u003e",
+            "business_category": "aws",
+            "city": "London",
+            "company_name": "AWS EMEA SARL (UK Branch)",
+            "country_code": "UK",
+            "description": "Senior Consultant, Data Lake \u0026 Analytics\u003cbr/\u003e\u003cbr/\u003eAre you a Data Analytics specialist? Do you have Data Warehousing and/or Hadoop/Data Lake experience? Do you like to solve the most complex and high scale (billions + records) data challenges in the world today? Would you like a career that gives you opportunities to help customers and partners use cloud computing to do big new things faster and at lower cost? Do you want to be part of history and transform businesses through cloud computing adoption? Do you like to work on-site in a variety of business environments, leading teams through high impact projects that use the newest data analytic technologies? Would you like a career path that enables you to progress with the rapid adoption of cloud computing?\u003cbr/\u003eAt AWS, we are hiring the best Data / Analytics cloud computing consultants, who can help our clients and partners derive business value from Data in the cloud. Our consultants will collaborate with partner and client teams to deliver proof-of-concept projects, conduct topical workshops, and lead implementation projects. These professional services engagements will focus on customer solutions such as Machine Learning, IoT, batch/real-time data processing, Data and Business intelligence. This role will specifically focus on Data processing capabilities and helping our customers and partners to remove the constraints that prevent our customers from leveraging their data to develop business insights.\u003cbr/\u003eResponsibilities include:\u003cbr/\u003e\u003cbr/\u003eAs Senior Consultant you will lead complex projects with autonomy and discretion, often involving multiple Amazon and customer teams.\u003cbr/\u003eYou will work with customers and partners, leading them through planning, prioritization and delivery of complex transformation initiatives, while collaborating with relevant Sales and Service Teams. You will design and deliver solutions that solve for new levels of complexity, scale and performance, and in turn, enable breakthrough innovations. You will create and apply frameworks, methods, best practices and artifacts that deliver prescriptive guidance to customers, and publish and present them in large forums and across various media platforms. You will guide customers’ technical architecture and investments, maximizing alignment with the AWS platform, and ease of adoption as new services and products become available.\u003cbr/\u003eYou will help customers define target business outcomes and related work streams, and lead the subsequent projects and initiatives to consistently exceed these goals.\u003cbr/\u003eAs an Amazonian leader you will demonstrate the Amazon Leadership Principles, coaching and mentoring others on best practices, performance and career development.\u003cbr/\u003eAmazon aims to be the most customer centric company on earth. Amazon Web Services (AWS) provides a highly reliable, scalable, low-cost infrastructure platform in the cloud that powers critical applications for hundreds of thousands of businesses in 190 countries around the world.\u003cbr/\u003eThis is a customer facing role. You will be required to travel to client locations and deliver professional services when needed.\u003cbr/\u003e\u003cbr/\u003e",
+            "description_short": "Senior Consultant, Data Lake \u0026 Analytics  Are you a Data Analytics specialist? Do you have Data Warehousing and/or Hadoop/Data Lake experience? Do you like to solve the most complex and high scale (billions",
+            "display_distance": null,
+            "id": "bbdc85fc-7527-4b79-b135-6f9c0dda6e0b",
+            "id_icims": "994927",
+            "job_category": "Solutions Architect",
+            "job_family": "Professional Services",
+            "job_path": "/en-gb/jobs/994927/senior-consultant-data-lake-analytics",
+            "job_schedule_type": "full-time",
+            "location": "UK, London",
+            "normalized_location": "London, England, GBR",
+            "optional_search_labels": [],
+            "posted_date": "November 18, 2019",
+            "preferred_qualifications": "Experience in a Chief Architect role or similar\u003cbr/\u003eMasters or PhD in Computer Science, Physics, Engineering or Math.\u003cbr/\u003eHands on experience leading large-scale global data warehousing and analytics projects.\u003cbr/\u003eAbility to lead effectively across organizations.\u003cbr/\u003eUnderstanding of database and analytical technologies in the industry including MPP and NoSQL databases, Data Warehouse design, BI reporting and Dashboard development.\u003cbr/\u003eDemonstrated industry leadership in the fields of database, data warehousing or data sciences.\u003cbr/\u003eImplementation and tuning experience specifically using Amazon Elastic Map Reduce (EMR).\u003cbr/\u003eImplementing AWS services in a variety of distributed computing, enterprise environments.\u003cbr/\u003eComputer Science or Math background preferred.\u003cbr/\u003eCustomer facing skills to represent AWS well within the customer’s environment and drive discussions with senior personnel regarding trade-offs, best practices, project management and risk mitigation. Should be able to interact with Chief Marketing Officers, Chief Risk Officers, Chief Technology Officers, and Chief Information Officers, as well as the people within their organizations.\u003cbr/\u003e\u003cbr/\u003e",
+            "primary_search_label": "aws.team-pro-serv",
+            "source_system": "Art",
+            "state": " ",
+            "title": "Senior Consultant, Data Lake \u0026 Analytics",
+            "university_job": null,
+            "updated_time": "about 2 months",
+            "url_next_step": "https://account.amazon.jobs/jobs/994927/apply",
+            "team": {
+                "id": null,
+                "business_category_id": null,
+                "identifier": null,
+                "label": "team-pro-serv",
+                "created_at": null,
+                "updated_at": null,
+                "image_file_name": null,
+                "image_content_type": null,
+                "image_file_size": null,
+                "image_updated_at": null,
+                "thumbnail_file_name": null,
+                "thumbnail_content_type": null,
+                "thumbnail_file_size": null,
+                "thumbnail_updated_at": null,
+                "hide_jobs": null,
+                "title": null,
+                "headline": null,
+                "description": null
+            }
+        }
+    ]
+}

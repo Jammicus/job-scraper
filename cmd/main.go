@@ -42,8 +42,15 @@ func main() {
 		URL:      "https://www.hashicorp.com/jobs/engineering",
 		FilePath: "hashiCorp.csv",
 	}
-	csv.WriteToCSV(hs, logger)
 
+	a := companies.Amazon{
+		URL:      "https://www.amazon.jobs/en-gb/search.json?schedule_type_id[]=Full-Time&radius=24km&facets[]=location&facets[]=business_category&facets[]=category&facets[]=schedule_type_id&facets[]=employee_class&facets[]=normalized_location&facets[]=job_function_id&offset=0&result_limit=10000&sort=relevant&latitude=&longitude=&loc_group_id=&loc_query=&base_query=&city=&country=&region=&county=&query_options=&location[]=london&",
+		FilePath: "amazon.csv",
+	}
+
+	csv.WriteToCSV(a, logger)
+
+	csv.WriteToCSV(hs, logger)
 	csv.WriteToCSV(dr, logger)
 	csv.WriteToCSV(understanding, logger)
 	csv.WriteToCSV(sr, logger)
