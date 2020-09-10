@@ -1,7 +1,7 @@
 csv/
 .DS_Store
 *.csv
-
+main
 # Companies
 
 internal/companies/amazon.go
