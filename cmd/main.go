@@ -53,8 +53,14 @@ func main() {
 		FilePath: "apple.csv",
 	}
 
-	csv.WriteToCSV(ap, logger)
+	g := companies.Google{
+		URL:      "https://careers.google.com/api/v2/jobs/search/?company=Google&company=Google%20Fiber&company=YouTube&employment_type=FULL_TIME&hl=en_US&jlo=en_US&location=London%2C%20UK&q=&sort_by=relevance",
+		FilePath: "google.csv",
+	}
 
+	csv.WriteToCSV(g, logger)
+
+	csv.WriteToCSV(ap, logger)
 	csv.WriteToCSV(a, logger)
 	csv.WriteToCSV(hs, logger)
 	csv.WriteToCSV(dr, logger)

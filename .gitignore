@@ -4,5 +4,4 @@ csv/
 main
 # Companies
 
-internal/companies/google.go
 internal/companies/jp.go
