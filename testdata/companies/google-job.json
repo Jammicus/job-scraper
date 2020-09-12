@@ -1,0 +1,85 @@
+{
+    "description": "<p>Google's software engineers develop the next-generation technologies that change how billions of users connect, explore, and interact with information and one another. Our products need to handle information at massive scale, and extend well beyond web search. We're looking for engineers who bring fresh ideas from all areas, including information retrieval, distributed computing, large-scale system design, networking and data storage, security, artificial intelligence, natural language processing, UI design and mobile; the list goes on and is growing every day. As a software engineer, you will work on a specific project critical to Google\u2019s needs with opportunities to switch teams and projects as you and our fast-paced business grow and evolve. We need our engineers to be versatile, display leadership qualities and be enthusiastic to take on new problems across the full-stack as we continue to push technology forward.<br><br>As a key member of a small and versatile team, you design, test, deploy and maintain software solutions.</p><p>Behind everything our users see online is the architecture built by the Technical Infrastructure team to keep it running. From developing and maintaining our data centers to building the next generation of Google platforms, we make Google's product portfolio possible. We're proud to be our engineers' engineers and love voiding warranties by taking things apart so we can rebuild them. We keep our networks up and running, ensuring our users have the best and fastest experience possible.</p>",
+    "title": "Software Engineer, PhD University Graduate, Infrastructure",
+    "education_levels": [
+        "DOCTORAL_OR_EQUIVALENT"
+    ],
+    "created": "2020-09-08T10:30:33.729Z",
+    "qualifications": "<p>Minimum qualifications:</p><ul>\n<li>PhD degree in Computer Science, Engineering, Mathematics, Information Technology, or equivalent practical experience.\n</li>\n<li>Examples of coding in one of the following programming languages including but not limited to: C, C++, Java, Python.</li>\n<li>Experience in one or more of the following: architecting and/or developing large scale distributed systems, concurrency, multithreading or synchronization.</li>\n</ul><br><p>Preferred qualifications:</p><ul>\n<li>Experience with TCP/IP and network programming.  Also with database internals, database language theories, database design, SQL and database programming.  </li>\n<li>Understanding of technologies such as virtualization and global infrastructure, load balancing, networking, massive data storage, Hadoop, MapReduce and security.</li>\n<li>Interest in or exposure to networking technologies/concepts such as Software Defined Networking (SDN) and OpenFlow.</li>\n<li>Experience with a large scale systems design in Unix/Linux.</li>\n<li>Authorization to legally work in the US.</li>\n<li>Ability to start in 2020 or 2021.</li>\n</ul>",
+    "locations": [
+        {
+            "address_lines": [
+                "1001 N Shoreline Blvd, Mountain View, CA 94043, USA"
+            ],
+            "post_code": "94043",
+            "country_code": "US",
+            "city": "Mountain View",
+            "lat": 37.4089801,
+            "country": "CA",
+            "lon": -122.0774431,
+            "display": "Mountain View, CA, USA"
+        },
+        {
+            "address_lines": [
+                "Sunnyvale, CA, USA"
+            ],
+            "post_code": null,
+            "country_code": "US",
+            "city": "Sunnyvale",
+            "lat": 37.36883,
+            "country": "CA",
+            "lon": -122.0363496,
+            "display": "Sunnyvale, CA, USA"
+        },
+        {
+            "address_lines": [
+                "Madison, WI, USA"
+            ],
+            "post_code": null,
+            "country_code": "US",
+            "city": "Madison",
+            "lat": 43.0730517,
+            "country": "WI",
+            "lon": -89.4012302,
+            "display": "Madison, WI, USA"
+        },
+        {
+            "address_lines": [
+                "Seattle, WA, USA"
+            ],
+            "post_code": null,
+            "country_code": "US",
+            "city": "Seattle",
+            "lat": 47.6062095,
+            "country": "WA",
+            "lon": -122.3320708,
+            "display": "Seattle, WA, USA"
+        },
+        {
+            "address_lines": [
+                "Kirkland, WA, USA"
+            ],
+            "post_code": null,
+            "country_code": "US",
+            "city": "Kirkland",
+            "lat": 47.6768927,
+            "country": "WA",
+            "lon": -122.2059833,
+            "display": "Kirkland, WA, USA"
+        }
+    ],
+    "additional_instructions": "Note: By applying to this position your application is automatically submitted to the following locations: <b>Mountain View, CA, USA; Sunnyvale, CA, USA; Madison, WI, USA; Seattle, WA, USA; Kirkland, WA, USA</b>",
+    "company_id": "projects/gweb-careers-proto/companies/ebbbf0d1-8121-483c-8f99-ee92597591fc",
+    "responsibilities": "<ul>\n<li>Specific responsibilities vary by project area.</li>\n<li>General responsibilities include: </li>\n<li>Write server-side code for web-based applications. Develop prototypes quickly and create robust high-volume production applications. </li>\n<li>Develop for specialist domains: client application development for Windows/Mac (Chrome, Toolbar, etc.), embedded systems and mobile apps (Android), developer tools (IDEs, large-scale build systems, compilers), infrastructure, internationalization, networking, and more.</li>\n</ul>",
+    "locations_count": 5,
+    "publish_date": "2020-09-10T19:54:11.649Z",
+    "modified": "2020-09-10T19:54:11.532Z",
+    "eeo": "Google is proud to be an equal opportunity workplace and is an affirmative action employer. We are committed to equal employment opportunity regardless of race, color, ancestry, religion, sex, national origin, sexual orientation, age, citizenship, marital status, disability, gender identity or Veteran status. We also consider qualified applicants regardless of criminal histories, consistent with legal requirements. See also <a href=\"https://careers.google.com/eeo/\">Google's EEO Policy</a> and <a href=\"/jobs/dist/legal/OFCCP_EEO_Post.pdf\">EEO is the Law.</a>  If you have a disability or special need that requires accommodation, please let us know by completing <a href=\"https://goo.gl/forms/aBt6Pu71i1kzpLHe2\">this form</a>.",
+    "application_instruction": "<p>Note: This application is intended for candidates that are eligible for full-time work authorization in the United States upon completing their education. Please be prepared to answer the following in your application: </p>\n<ul><li>(1) Are you legally authorized to work in the United States? </li><li>\n(2) Do you now, or will you in the future, require sponsorship for employment visa status (e.g., H-1B visa status, etc.) to work legally in the United States?</li></ul>",
+    "apply_url": "https://www.google.com/about/careers/applications/signin?jobId=CiQAL2FckS4Yo7Qz5T5fpuntShUn4a1hl5-6Prq3W4QJ6wB2VPYSOgBxRzuAChYIZR6Z3W6EbxzQ3spAs2v203CIPaG56RoMU5mTZal4AjanmMkJAiSYBGpl0wdYlboCcKU%3D_V2&jobTitle=Software+Engineer&loc=US",
+    "id": "jobs/136853555093873350",
+    "categories": [
+        "SOFTWARE_ENGINEERING"
+    ],
+    "company_name": "Google"
+}
