@@ -59,7 +59,6 @@ func main() {
 	}
 
 	csv.WriteToCSV(g, logger)
-
 	csv.WriteToCSV(ap, logger)
 	csv.WriteToCSV(a, logger)
 	csv.WriteToCSV(hs, logger)

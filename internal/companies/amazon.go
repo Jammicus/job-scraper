@@ -2,7 +2,6 @@ package companies
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	jobs "job-scraper/internal"
 	"net/http"
@@ -71,13 +70,11 @@ func (a Amazon) gatherSpecs(aAPI amazonAPI, logger *zap.Logger) ([]jobs.Job, err
 		job := jobs.Job{}
 		job.Title = item.Title
 		job.Type = item.Schedule
-		// todo
-
 		job.URL = "www.amazon.jobs" + item.JobPath
+		// TODO split into own method.
 		job.Requirements = append(strings.Split(item.BasicQuals, "<br/>"), strings.Split(item.PerferedQual, "<br/>")...)
 		job.Salary = "N/A"
 		job.Location = item.Location
-		fmt.Println(job)
 
 		foundJobs = append(foundJobs, job)
 
