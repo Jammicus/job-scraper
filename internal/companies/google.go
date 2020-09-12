@@ -34,8 +34,7 @@ type googleJob struct {
 	Education    []string `json:"education_levels"`
 	ID           string   `json:"id"`
 	Locations    []struct {
-		City    string `json:"city"`
-		Country string `json:"country"`
+		Display string `json:"display"`
 	} `json:"locations"`
 }
 
@@ -118,7 +117,7 @@ func (g *Google) findJobs(logger *zap.Logger) {
 
 func (g Google) gatherSpecs(gJob googleJob, logger *zap.Logger) (jobs.Job, error) {
 	sugar := logger.Sugar()
-	re := regexp.MustCompile(`<li.*?>(.*)</li>`)
+	re := regexp.MustCompile(`<li.*?>(.*)[\r\n]*</li>`)
 	job := jobs.Job{}
 
 	// Need to then go the API and get the job spec.
@@ -136,9 +135,7 @@ func (g Google) gatherSpecs(gJob googleJob, logger *zap.Logger) (jobs.Job, error
 	req := re.FindAllStringSubmatch(gJob.Requirements, -1)
 
 	for _, i := range req {
-		for _, req := range i {
-			job.Requirements = append(job.Requirements, r.Replace(req))
-		}
+		job.Requirements = append(job.Requirements, r.Replace(i[0]))
 	}
 
 	job.Title = gJob.Title
@@ -150,9 +147,7 @@ func (g Google) gatherSpecs(gJob googleJob, logger *zap.Logger) (jobs.Job, error
 	job.Salary = "N/A"
 
 	for _, item := range gJob.Locations {
-
-		job.Location = job.Location + item.City + "," + item.Country
-
+		job.Location = job.Location + item.Display + " "
 	}
 
 	sugar.Debugf("Found Google job %v", job)
