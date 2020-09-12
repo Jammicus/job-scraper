@@ -3,7 +3,7 @@ package main
 import (
 	csv "job-scraper/internal"
 	companies "job-scraper/internal/companies"
-	recuriters "job-scraper/internal/recruiters"
+	recruiters "job-scraper/internal/recruiters"
 
 	"go.uber.org/zap"
 )
@@ -18,17 +18,17 @@ func main() {
 
 	sugar.Info("Starting program")
 
-	understanding := recuriters.Understanding{
+	understanding := recruiters.Understanding{
 		URL:      "https://www.understandingrecruitment.co.uk/jobs/england/?&search%5Bradius%5D=50.0&selected_locations=a-6269131",
 		FilePath: "understanding.csv",
 	}
 
-	sr := recuriters.SR2{
+	sr := recruiters.SR2{
 		URL:      "https://www.sr2rec.co.uk/jobs/?jf_what=&jf_where=London",
 		FilePath: "sr2rec.csv",
 	}
 
-	cs := recuriters.ClientServer{
+	cs := recruiters.ClientServer{
 		URL:      "https://www.client-server.com/jobs/london/",
 		FilePath: "clientServer.csv",
 	}
