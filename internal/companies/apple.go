@@ -70,8 +70,9 @@ func (a *Apple) findJobs(logger *zap.Logger) {
 		var link string
 		if strings.Contains(a.URL, "?") {
 			link = a.URL + "&page=" + strconv.Itoa(pageNum)
+		}
 
-		} else {
+		if !strings.Contains(a.URL, "?") {
 			link = a.URL + "?page=" + strconv.Itoa(pageNum)
 		}
 

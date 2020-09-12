@@ -26,13 +26,10 @@ func TestIsUp(t *testing.T) {
 
 		if test.ExpectedError {
 			assert.Error(t, result)
-
 		}
 
 		if !test.ExpectedError {
 			assert.NoError(t, result)
 		}
-
-		t.Fail()
 	}
 }
