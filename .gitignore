@@ -2,6 +2,3 @@ csv/
 .DS_Store
 *.csv
 main
-# Companies
-
-internal/companies/jp.go
