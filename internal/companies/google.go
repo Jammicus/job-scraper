@@ -32,6 +32,11 @@ type googleJob struct {
 	Title        string   `json:"title"`
 	Requirements string   `json:"qualifications"`
 	Education    []string `json:"education_levels"`
+	ID           string   `json:"id"`
+	Locations    []struct {
+		City    string `json:"city"`
+		Country string `json:"country"`
+	} `json:"locations"`
 }
 
 type Google jobs.JobSource
@@ -55,6 +60,8 @@ func (g Google) GetPath() string {
 
 func (g *Google) findJobs(logger *zap.Logger) {
 	var gAPI googleAPI
+	var gJob googleJob
+
 	url := g.GetURL()
 	pageNum := 1
 	sugar := logger.Sugar()
@@ -70,9 +77,28 @@ func (g *Google) findJobs(logger *zap.Logger) {
 		responseData, err := ioutil.ReadAll(resp.Body)
 		err = json.Unmarshal(responseData, &gAPI)
 
-		jobSet, err := g.gatherSpecs(gAPI, logger)
+		for _, item := range gAPI.Jobs {
+			url := "https://careers.google.com/api/v2/jobs/get/?job_name=jobs%2F" + strings.Split(item.JobID, "/")[1]
+			sugar.Infof("Querying Google API for job %v", url)
 
-		jobs = append(jobs, jobSet...)
+			resp, err := http.Get(url)
+
+			if err != nil {
+				sugar.Error(zap.Error(err))
+			}
+			responseData, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				sugar.Error(zap.Error(err))
+			}
+			err = json.Unmarshal(responseData, &gJob)
+
+			if err != nil {
+				sugar.Error(zap.Error(err))
+			}
+			jobSet, err := g.gatherSpecs(gJob, logger)
+			jobs = append(jobs, jobSet)
+
+		}
 
 		if err != nil {
 			sugar.Error(zap.Error(err))
@@ -90,64 +116,46 @@ func (g *Google) findJobs(logger *zap.Logger) {
 
 }
 
-func (g Google) gatherSpecs(gAPI googleAPI, logger *zap.Logger) ([]jobs.Job, error) {
-	var gJob googleJob
+func (g Google) gatherSpecs(gJob googleJob, logger *zap.Logger) (jobs.Job, error) {
 	sugar := logger.Sugar()
-	foundJobs := []jobs.Job{}
 	re := regexp.MustCompile(`<li.*?>(.*)</li>`)
+	job := jobs.Job{}
 
 	// Need to then go the API and get the job spec.
 	// https://careers.google.com/api/v2/jobs/get/?job_name=jobs%2F136853555093873350
 
-	for _, item := range gAPI.Jobs {
-		job := jobs.Job{}
-		url := "https://careers.google.com/api/v2/jobs/get/?job_name=jobs%2F" + strings.Split(item.JobID, "/")[1]
-		sugar.Infof("Querying Google API for job %v", url)
+	r := strings.NewReplacer("<p>Minimum qualifications:</p>", "",
+		"<ul>", "",
+		"</ul>", "",
+		"\n", "",
+		"<p>Preferred qualifications:</p>", "",
+		"<br>", "",
+		"<li>", "",
+		"</li>", "")
 
-		resp, err := http.Get(url)
+	req := re.FindAllStringSubmatch(gJob.Requirements, -1)
 
-		if err != nil {
-			sugar.Error(zap.Error(err))
+	for _, i := range req {
+		for _, req := range i {
+			job.Requirements = append(job.Requirements, r.Replace(req))
 		}
-		responseData, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			sugar.Error(zap.Error(err))
-		}
-		err = json.Unmarshal(responseData, &gJob)
+	}
 
-		if err != nil {
-			sugar.Error(zap.Error(err))
-		}
+	job.Title = gJob.Title
+	job.Type = "Permanent"
 
-		r := strings.NewReplacer("<p>Minimum qualifications:</p>", "",
-			"<ul>", "",
-			"</ul>", "",
-			"\n", "",
-			"<p>Preferred qualifications:</p>", "",
-			"<br>", "",
-			"<li>", "",
-			"</li>", "")
+	// jobID is of format "jobs/<jobID>"
+	job.URL = "https://careers.google.com/jobs/results/" + strings.Split(gJob.ID, "/")[1]
 
-		req := re.FindAllStringSubmatch(gJob.Requirements, -1)
+	job.Salary = "N/A"
 
-		for _, i := range req {
-			for _, req := range i {
-				job.Requirements = append(job.Requirements, r.Replace(req))
-			}
-		}
+	for _, item := range gJob.Locations {
 
-		job.Title = gJob.Title
-		job.Type = "Permanent"
-
-		// jobID is of format "jobs/<jobID>"
-		job.URL = "https://careers.google.com/jobs/results/" + strings.Split(item.JobID, "/")[1]
-
-		job.Salary = "N/A"
-		job.Location = strings.Join(item.Location, ",")
-
-		foundJobs = append(foundJobs, job)
+		job.Location = job.Location + item.City + "," + item.Country
 
 	}
 
-	return foundJobs, nil
+	sugar.Debugf("Found Google job %v", job)
+
+	return job, nil
 }
