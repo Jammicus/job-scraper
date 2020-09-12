@@ -1,6 +1,6 @@
 # Job-scraper
 
-![Build and Test](https://github.com/Jammicus/job-scraper/workflows/Build%20and%20Test/badge.svg?branch=master)
+![Build and Test](https://github.com/Jammicus/job-scraper/workflows/Build%20and%20Test/badge.svg?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/Jammicus/job-scraper)](https://goreportcard.com/report/github.com/Jammicus/job-scraper)
 
 If you are going to do something more than once - Automate it.
 
