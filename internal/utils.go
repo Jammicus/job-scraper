@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 )
 
+// IsUp checks whether a website is accessible, if it is not, returns an error
 func IsUp(url string) error {
 	_, err := http.Get(url)
 	if err != nil {
@@ -15,6 +16,7 @@ func IsUp(url string) error {
 	return nil
 }
 
+// StartTestServer starts a test server to serve a website page. Should only be used when testing
 func StartTestServer(filePath string) *httptest.Server {
 
 	mux := http.NewServeMux()
@@ -26,7 +28,7 @@ func StartTestServer(filePath string) *httptest.Server {
 	}
 
 	mux.HandleFunc("/job", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html")
+		// w.Header().Set("Content-Type", "text/html")
 		w.Write(job)
 	})
 
