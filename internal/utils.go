@@ -28,7 +28,6 @@ func StartTestServer(filePath string) *httptest.Server {
 	}
 
 	mux.HandleFunc("/job", func(w http.ResponseWriter, r *http.Request) {
-		// w.Header().Set("Content-Type", "text/html")
 		w.Write(job)
 	})
 
