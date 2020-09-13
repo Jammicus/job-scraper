@@ -29,10 +29,6 @@ func (cs ClientServer) GetJobs(logger *zap.Logger) []jobs.Job {
 	return cs.Jobs
 }
 
-func (cs ClientServer) GetURL() string {
-	return cs.URL
-}
-
 func (cs ClientServer) GetPath() string {
 	return cs.FilePath
 }

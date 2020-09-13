@@ -25,10 +25,6 @@ func (sr SR2) GetJobs(logger *zap.Logger) []jobs.Job {
 	return sr.Jobs
 }
 
-func (sr SR2) GetURL() string {
-	return sr.URL
-}
-
 func (sr SR2) GetPath() string {
 	return sr.FilePath
 }

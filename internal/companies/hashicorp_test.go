@@ -48,7 +48,7 @@ func TestGatherSpecsHashicorp(t *testing.T) {
 		},
 	}
 
-	result, err := h.gatherSpecs(h.GetURL(), logger)
+	result, err := h.gatherSpecs(h.URL, logger)
 
 	if err != nil {
 		log.Fatal(err)

@@ -49,10 +49,6 @@ func (g Google) GetJobs(logger *zap.Logger) []jobs.Job {
 	return g.Jobs
 }
 
-func (g Google) GetURL() string {
-	return g.URL
-}
-
 func (g Google) GetPath() string {
 	return g.FilePath
 }
@@ -61,7 +57,7 @@ func (g *Google) findJobs(logger *zap.Logger) {
 	var gAPI googleAPI
 	var gJob googleJob
 
-	url := g.GetURL()
+	url := g.URL
 	pageNum := 1
 	sugar := logger.Sugar()
 	jobs := []jobs.Job{}

@@ -21,10 +21,6 @@ func (h Hashicorp) GetJobs(logger *zap.Logger) []jobs.Job {
 	return h.Jobs
 }
 
-func (h Hashicorp) GetURL() string {
-	return h.URL
-}
-
 func (h Hashicorp) GetPath() string {
 	return h.FilePath
 }

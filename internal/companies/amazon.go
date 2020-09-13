@@ -35,10 +35,6 @@ func (a Amazon) GetJobs(logger *zap.Logger) []jobs.Job {
 	return a.Jobs
 }
 
-func (a Amazon) GetURL() string {
-	return a.URL
-}
-
 func (a Amazon) GetPath() string {
 	return a.FilePath
 }
@@ -48,7 +44,7 @@ func (a *Amazon) findJobs(logger *zap.Logger) {
 
 	sugar := logger.Sugar()
 	sugar.Infof("Querying Amazon API for jobs")
-	resp, err := http.Get(a.GetURL())
+	resp, err := http.Get(a.URL)
 
 	if err != nil {
 		sugar.Errorf("Error querying Amazon API for jobs %v", zap.Error(err))

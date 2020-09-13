@@ -46,7 +46,7 @@ func TestGatherSpecsApple(t *testing.T) {
 		},
 	}
 
-	result, err := a.gatherSpecs(a.GetURL(), logger)
+	result, err := a.gatherSpecs(a.URL, logger)
 
 	if err != nil {
 		log.Fatal(err)

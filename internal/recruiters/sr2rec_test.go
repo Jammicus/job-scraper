@@ -43,7 +43,7 @@ func TestGatherSpecsSR2(t *testing.T) {
 		},
 	}
 
-	result, err := sr.gatherSpecs(sr.GetURL(), logger)
+	result, err := sr.gatherSpecs(sr.URL, logger)
 
 	if err != nil {
 		log.Fatal(err)

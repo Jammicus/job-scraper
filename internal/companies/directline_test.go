@@ -48,7 +48,7 @@ func TestGatherSpecsDirectline(t *testing.T) {
 		},
 	}
 
-	result, err := dr.gatherSpecs(dr.GetURL(), logger)
+	result, err := dr.gatherSpecs(dr.URL, logger)
 
 	if err != nil {
 		log.Fatal(err)

@@ -40,7 +40,7 @@ func TestGatherSpecsUnderstanding(t *testing.T) {
 		},
 	}
 
-	result, err := understanding.gatherSpecs(understanding.GetURL(), logger)
+	result, err := understanding.gatherSpecs(understanding.URL, logger)
 
 	if err != nil {
 		log.Fatal(err)

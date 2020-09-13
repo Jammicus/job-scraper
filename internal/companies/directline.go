@@ -20,10 +20,6 @@ func (dr DirectLine) GetJobs(logger *zap.Logger) []jobs.Job {
 	return dr.Jobs
 }
 
-func (dr DirectLine) GetURL() string {
-	return dr.URL
-}
-
 func (dr DirectLine) GetPath() string {
 	return dr.FilePath
 }

@@ -20,10 +20,6 @@ func (u Understanding) GetJobs(logger *zap.Logger) []jobs.Job {
 	return u.Jobs
 }
 
-func (u Understanding) GetURL() string {
-	return u.URL
-}
-
 func (u Understanding) GetPath() string {
 	return u.FilePath
 }

@@ -6,7 +6,6 @@ import (
 
 // FindJobs interface provides basic methods needed to be able to write jobs to a file
 type FindJobs interface {
-	GetURL() string
 	GetJobs(*zap.Logger) []Job
 	GetPath() string
 }

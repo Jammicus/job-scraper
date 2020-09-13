@@ -24,10 +24,6 @@ func (a Apple) GetJobs(logger *zap.Logger) []jobs.Job {
 	return a.Jobs
 }
 
-func (a Apple) GetURL() string {
-	return a.URL
-}
-
 func (a Apple) GetPath() string {
 	return a.FilePath
 }
