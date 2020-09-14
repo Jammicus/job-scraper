@@ -87,7 +87,6 @@ func (cs ClientServer) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 		job.URL = r.URL.String()
 	})
 
-
 	// Refactor this, it is gross
 	d.OnHTML(".job.col-md-8.col-sm-12.clearfix", func(e *colly.HTMLElement) {
 
