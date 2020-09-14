@@ -75,10 +75,6 @@ func (cs *ClientServer) findJobs(logger *zap.Logger) {
 func (cs ClientServer) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 	sugar := logger.Sugar()
 
-	jobType := regexp.MustCompile(`^Job Type:`)
-	jobDetails := regexp.MustCompile(`£[0-9]+ - £[0-9]+`)
-	jobRequirements := regexp.MustCompile(`Requirements:\s*?[*]`)
-
 	job := jobs.Job{}
 
 	d := colly.NewCollector(
@@ -91,28 +87,29 @@ func (cs ClientServer) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 		job.URL = r.URL.String()
 	})
 
+
+	// Refactor this, it is gross
 	d.OnHTML(".job.col-md-8.col-sm-12.clearfix", func(e *colly.HTMLElement) {
 
-		title := e.ChildText("h1")
-
-		job.URL = url
-		job.Title = title
+		e.ForEach("h1", func(_ int, el *colly.HTMLElement) {
+			job.Title = cs.getJobTitle(el)
+		})
 
 		e.ForEach("p", func(_ int, el *colly.HTMLElement) {
 
 			switch {
 			case jobRequirements.MatchString(el.Text):
 
-				job.Requirements, _ = cs.getRequirements(el)
+				job.Requirements = cs.getJobRequirements(el)
 
 			case jobDetails.MatchString(el.Text):
 
-				job.Location, _ = cs.getJobLocation(el.Text)
-				job.Salary, _ = cs.getSalary(el.Text)
+				job.Location = cs.getJobLocation(el.Text)
+				job.Salary = cs.getJobSalary(el.Text)
 
 			case jobType.MatchString(el.Text):
 
-				job.Type, _ = cs.getJobType(el.Text)
+				job.Type = cs.getJobType(el.Text)
 			}
 
 		})
@@ -128,27 +125,40 @@ func (cs ClientServer) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 	return job, nil
 }
 
-func (cs ClientServer) getJobType(s string) (string, error) {
+func (cs ClientServer) getJobTitle(e *colly.HTMLElement) string {
+
+	return strings.TrimSpace(e.Text)
+}
+
+func (cs ClientServer) getJobType(s string) string {
 	jobTypeAgain := jobType.Split(s, 2)
 
 	x := strings.TrimSpace(jobTypeAgain[len(jobTypeAgain)-1])
-	return x, nil
+	return x
 }
 
-func (cs ClientServer) getJobLocation(s string) (string, error) {
-	location := jobDetails.Split(s, -1)[0]
+func (cs ClientServer) getJobLocation(s string) string {
+	location := strings.TrimSpace(jobDetails.Split(s, -1)[0])
 
-	return strings.TrimSpace(location), nil
+	if strings.HasSuffix(location, ",") {
+		return strings.TrimSuffix(location, ",")
+	}
+
+	return strings.TrimSpace(location)
 }
 
-func (cs ClientServer) getSalary(s string) (string, error) {
+func (cs ClientServer) getJobSalary(s string) string {
 	salary := jobDetails.FindStringSubmatch(s)[0]
 
-	return strings.TrimSpace(salary), nil
+	return strings.TrimSpace(salary)
 }
 
-func (cs ClientServer) getRequirements(el *colly.HTMLElement) ([]string, error) {
+func (cs ClientServer) getJobRequirements(el *colly.HTMLElement) []string {
 	jobRequirement := regexp.MustCompile(`[^<br\/>][^<]*`)
+
+	fmt.Println("@@@@@@@@")
+	fmt.Println(el.Text)
+	fmt.Println("@@@@@@@@")
 
 	requirements := []string{}
 	el.DOM.Each(func(_ int, s *goquery.Selection) {
@@ -167,5 +177,9 @@ func (cs ClientServer) getRequirements(el *colly.HTMLElement) ([]string, error) 
 			}
 		}
 	})
-	return requirements, nil
+	return requirements
+}
+
+func (cs ClientServer) getJobURL(r *colly.Request) string {
+	return r.URL.String()
 }
