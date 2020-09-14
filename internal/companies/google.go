@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gocolly/colly"
 	"go.uber.org/zap"
 )
 
@@ -113,12 +114,43 @@ func (g *Google) findJobs(logger *zap.Logger) {
 
 func (g Google) gatherSpecs(gJob googleJob, logger *zap.Logger) (jobs.Job, error) {
 	sugar := logger.Sugar()
-	re := regexp.MustCompile(`<li.*?>(.*)[\r\n]*</li>`)
 	job := jobs.Job{}
 
 	// Need to then go the API and get the job spec.
 	// https://careers.google.com/api/v2/jobs/get/?job_name=jobs%2F136853555093873350
 
+	job.Requirements = g.getJobRequirements(gJob)
+
+	job.Title = g.getJobTitle(gJob)
+	job.Type = g.getJobType(gJob)
+
+	// jobID is of format "jobs/<jobID>"
+	job.URL = "https://careers.google.com/jobs/results/" + strings.Split(gJob.ID, "/")[1]
+
+	job.Salary = g.getJobSalary(gJob)
+
+	job.Location = g.getJobLocation(gJob)
+
+	sugar.Debugf("Found Google job %v", job)
+
+	return job, nil
+}
+
+func (g Google) getJobLocation(gJob googleJob) string {
+
+	location := ""
+
+	for _, item := range gJob.Locations {
+		location = location + item.Display + " "
+	}
+	return location
+
+}
+
+func (g Google) getJobRequirements(gJob googleJob) []string {
+
+	requirements := []string{}
+	re := regexp.MustCompile(`<li.*?>(.*)[\r\n]*</li>`)
 	r := strings.NewReplacer("<p>Minimum qualifications:</p>", "",
 		"<ul>", "",
 		"</ul>", "",
@@ -131,22 +163,25 @@ func (g Google) gatherSpecs(gJob googleJob, logger *zap.Logger) (jobs.Job, error
 	req := re.FindAllStringSubmatch(gJob.Requirements, -1)
 
 	for _, i := range req {
-		job.Requirements = append(job.Requirements, r.Replace(i[0]))
+		requirements = append(requirements, r.Replace(i[0]))
 	}
 
-	job.Title = gJob.Title
-	job.Type = "Permanent"
+	return requirements
 
-	// jobID is of format "jobs/<jobID>"
-	job.URL = "https://careers.google.com/jobs/results/" + strings.Split(gJob.ID, "/")[1]
+}
 
-	job.Salary = "N/A"
+func (g Google) getJobURL(r *colly.Request) string {
+	return r.URL.String()
+}
 
-	for _, item := range gJob.Locations {
-		job.Location = job.Location + item.Display + " "
-	}
+func (g Google) getJobTitle(gJob googleJob) string {
+	return gJob.Title
+}
 
-	sugar.Debugf("Found Google job %v", job)
+func (g Google) getJobType(gJob googleJob) string {
+	return "Permanent"
+}
 
-	return job, nil
+func (g Google) getJobSalary(gJob googleJob) string {
+	return "N/A"
 }
