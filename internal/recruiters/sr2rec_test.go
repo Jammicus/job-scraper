@@ -158,7 +158,7 @@ func TestGetJobSalarySR2(t *testing.T) {
 		}
 	})
 
-	result, err := sr.getSalary(elements[0])
+	result, err := sr.getJobSalary(elements[0])
 
 	if err != nil {
 		log.Fatal(err)
@@ -167,7 +167,7 @@ func TestGetJobSalarySR2(t *testing.T) {
 	assert.Equal(t, "£400 - £500", result)
 }
 
-func TestGetRequirementsSR2(t *testing.T) {
+func TestGetJobRequirementsSR2(t *testing.T) {
 	expected := []string{
 		"Java 8+",
 		"RESTful APIs",
@@ -204,11 +204,83 @@ func TestGetRequirementsSR2(t *testing.T) {
 		}
 	})
 
-	result, err := sr.getRequirements(elements[0])
+	result := sr.getJobRequirements(elements[0])
+
+	assert.Equal(t, expected, result)
+}
+
+func TestGetJobTitleSR2(t *testing.T) {
+	expected := "Lead Java Developer – SC Cleared"
+	ctx := &colly.Context{}
+	resp := &colly.Response{
+		Request: &colly.Request{
+			Ctx: ctx,
+		},
+		Ctx: ctx,
+	}
+	sr := SR2{
+		URL: "",
+	}
+
+	file, err := os.Open("../../testdata/recruiters/sr2rec-job.html")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	doc, err := goquery.NewDocumentFromReader(file)
+	sel := "h1"
+	elements := []*colly.HTMLElement{}
+	i := 0
+	doc.Find(sel).Each(func(_ int, s *goquery.Selection) {
+		for _, n := range s.Nodes {
+			elements = append(elements, colly.NewHTMLElementFromSelectionNode(resp, s, n, i))
+			i++
+		}
+	})
+
+	result := sr.getJobTitle(elements[0])
+
 	assert.Equal(t, expected, result)
+}
+
+// Test via the gatherSpecs method for now.
+// TODO: Refactor test to use colly.Request
+func TestGetJobURL(t *testing.T) {
+	logger, err := zap.NewDevelopment()
+	defer logger.Sync()
+	sugar := logger.Sugar()
+	if err != nil {
+		sugar.Fatalf("Unable to create logger")
+	}
+
+	ts := jobs.StartTestServer("../../testdata/recruiters/sr2rec-job.html")
+	defer ts.Close()
+
+	sr := SR2{
+		URL: ts.URL + "/job",
+	}
+	expected := jobs.Job{
+		Title:    "Lead Java Developer – SC Cleared",
+		Type:     "Contract",
+		Salary:   "£400 - £500",
+		Location: "London",
+		URL:      ts.URL + "/job",
+		Requirements: []string{
+			"Java 8+",
+			"RESTful APIs",
+			"Spring",
+			"CI/CD",
+			"Gradle or Maven",
+			"AWS or Azure",
+		},
+	}
+
+	result, err := sr.gatherSpecs(sr.URL, logger)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, expected.URL, result.URL)
 }

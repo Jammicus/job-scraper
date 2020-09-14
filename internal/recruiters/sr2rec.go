@@ -3,7 +3,6 @@ package recruiters
 import (
 	"fmt"
 	jobs "job-scraper/internal"
-	"log"
 	"regexp"
 	"strings"
 	"time"
@@ -81,7 +80,6 @@ func (sr *SR2) findJobs(logger *zap.Logger) {
 func (sr SR2) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 	sugar := logger.Sugar()
 
-	jobTitle := regexp.MustCompile(`^.*?[^|-]*`)
 	job := jobs.Job{}
 
 	d := colly.NewCollector(
@@ -94,29 +92,23 @@ func (sr SR2) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 	d.Visit(url)
 
 	d.OnRequest(func(r *colly.Request) {
-		sugar.Debugf("Visiting page %v", r.URL.String())
-		job.URL = r.URL.String()
+		url := sr.getJobURL(r)
+		sugar.Debugf("Visiting page %v", url)
+		job.URL = url
 	})
 
 	d.OnHTML("h1", func(e *colly.HTMLElement) {
-		job.Title = jobTitle.FindStringSubmatch(e.Text)[0]
+		job.Title = sr.getJobTitle(e)
 
 	})
 	d.OnHTML("article.single-wpbb_job-content.entry.clr", func(e *colly.HTMLElement) {
-		var err error
-
-		job.Requirements, err = sr.getRequirements(e)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
+		job.Requirements = sr.getJobRequirements(e)
 	})
 
 	d.OnHTML("div.wpbb-job-data__wrapper", func(e *colly.HTMLElement) {
 		var err error
 
-		job.Salary, err = sr.getSalary(e)
+		job.Salary, err = sr.getJobSalary(e)
 		if err != nil {
 			sugar.Errorf("Could not get job salary %v", zap.Error(err))
 		}
@@ -164,7 +156,7 @@ func (sr SR2) getJobLocation(e *colly.HTMLElement) (string, error) {
 	return location, nil
 }
 
-func (sr SR2) getSalary(e *colly.HTMLElement) (string, error) {
+func (sr SR2) getJobSalary(e *colly.HTMLElement) (string, error) {
 	var salary string
 	var salaryTo string
 	var salaryFrom string
@@ -192,12 +184,21 @@ func (sr SR2) getSalary(e *colly.HTMLElement) (string, error) {
 	return "", fmt.Errorf("Could not find salary information")
 }
 
-func (sr SR2) getRequirements(e *colly.HTMLElement) ([]string, error) {
+func (sr SR2) getJobRequirements(e *colly.HTMLElement) []string {
 
 	requirements := []string{}
 	e.ForEach("li:not(.meta-date):not(.share-twitter):not(.share-facebook):not(.share-googleplus):not(.share-pinterest)", func(_ int, el *colly.HTMLElement) {
 		requirements = append(requirements, el.Text)
 	})
 
-	return requirements, nil
+	return requirements
+}
+
+func (sr SR2) getJobTitle(e *colly.HTMLElement) string {
+	jobTitle := regexp.MustCompile(`^.*?[^|-]*`)
+	return jobTitle.FindStringSubmatch(e.Text)[0]
+}
+
+func (sr SR2) getJobURL(r *colly.Request) string {
+	return r.URL.String()
 }
