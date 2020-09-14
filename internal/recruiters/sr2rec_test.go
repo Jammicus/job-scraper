@@ -246,7 +246,7 @@ func TestGetJobTitleSR2(t *testing.T) {
 
 // Test via the gatherSpecs method for now.
 // TODO: Refactor test to use colly.Request
-func TestGetJobURL(t *testing.T) {
+func TestGetJobURLSR2(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
 	sugar := logger.Sugar()

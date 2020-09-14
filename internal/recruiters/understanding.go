@@ -77,12 +77,13 @@ func (u Understanding) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 
 	d.Visit(url)
 	d.OnRequest(func(r *colly.Request) {
-		sugar.Debugf("Visiting page %v", r.URL.String())
-		job.URL = r.URL.String()
+		url := u.getJobURL(r)
+		sugar.Debugf("Visiting page %v", url)
+		job.URL = url
 	})
 
 	d.OnHTML("h1", func(e *colly.HTMLElement) {
-		job.Title = e.Text
+		job.Title = u.getJobTitle(e)
 
 	})
 
@@ -94,7 +95,7 @@ func (u Understanding) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 			sugar.Errorf("Could not get job location %v", zap.Error(err))
 		}
 
-		job.Salary, err = u.getSalary(e)
+		job.Salary, err = u.getJobSalary(e)
 		if err != nil {
 			sugar.Errorf("Could not get job salary %v", zap.Error(err))
 		}
@@ -108,7 +109,7 @@ func (u Understanding) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 	d.OnHTML("article.clearfix.mb20", func(e *colly.HTMLElement) {
 		var err error
 
-		job.Requirements, err = u.getRequirements(e)
+		job.Requirements, err = u.getJobRequirements(e)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -134,18 +135,28 @@ func (u Understanding) getJobLocation(e *colly.HTMLElement) (string, error) {
 	return locationReplacer.Replace(location), nil
 }
 
-func (u Understanding) getSalary(e *colly.HTMLElement) (string, error) {
+func (u Understanding) getJobSalary(e *colly.HTMLElement) (string, error) {
 
 	salaryReplacer := strings.NewReplacer("Salary:", "", "\n", "", "\t", "")
 	salary := e.ChildText("li.job_salary")
 	return salaryReplacer.Replace(salary), nil
 }
 
-func (u Understanding) getRequirements(e *colly.HTMLElement) ([]string, error) {
+func (u Understanding) getJobRequirements(e *colly.HTMLElement) ([]string, error) {
 	requirements := []string{}
 	e.ForEach("li", func(_ int, el *colly.HTMLElement) {
 		// requirements one at a time
 		requirements = append(requirements, el.Text)
 	})
 	return requirements, nil
+}
+
+func (u Understanding) getJobTitle(e *colly.HTMLElement) string {
+
+	return e.Text
+}
+
+func (u Understanding) getJobURL(r *colly.Request) string {
+
+	return r.URL.String()
 }

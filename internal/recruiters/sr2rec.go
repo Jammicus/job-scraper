@@ -156,6 +156,7 @@ func (sr SR2) getJobLocation(e *colly.HTMLElement) (string, error) {
 	return location, nil
 }
 
+// TODO: Rethink errors
 func (sr SR2) getJobSalary(e *colly.HTMLElement) (string, error) {
 	var salary string
 	var salaryTo string
