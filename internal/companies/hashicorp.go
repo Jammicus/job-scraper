@@ -1,7 +1,6 @@
 package companies
 
 import (
-	"fmt"
 	jobs "job-scraper/internal"
 	"strings"
 	"time"
@@ -60,7 +59,6 @@ func (h *Hashicorp) findJobs(logger *zap.Logger) {
 
 func (h Hashicorp) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 
-	var err error
 	sugar := logger.Sugar()
 
 	job := jobs.Job{}
@@ -75,42 +73,60 @@ func (h Hashicorp) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error)
 	d.Visit(url)
 
 	d.OnRequest(func(r *colly.Request) {
-		sugar.Debugf("Visiting page %v", r.URL.String())
-		job.URL = r.URL.String()
+		url := h.getJobURL(r)
+		sugar.Debugf("Visiting page %v", url)
+		job.URL = url
 	})
 
 	d.OnHTML("h1", func(e *colly.HTMLElement) {
-		job.Title = strings.TrimSpace(e.Text)
+		job.Title = h.getJobTitle(e)
 	})
 
 	d.OnHTML(".g-type-label.location", func(e *colly.HTMLElement) {
-		job.Location = strings.TrimSpace(e.Text)
+		job.Location = h.getJobLocation(e)
 
 	})
 
 	d.OnHTML(".application-details", func(e *colly.HTMLElement) {
 
-		job.Requirements, err = h.getRequirements(e)
-		if err != nil {
-			sugar.Errorf("Error geting job requiremnts %v", zap.Error(err))
-		}
+		job.Requirements = h.getJobRequirements(e)
 
 	})
 
 	// Not specified on the pages.
-	job.Salary = "N/A"
-	job.Type = "Permanent"
+	job.Salary = h.getJobSalary(nil)
+	job.Type = h.getJobType(nil)
 	d.Wait()
 	return job, nil
 }
 
-func (h Hashicorp) getRequirements(e *colly.HTMLElement) ([]string, error) {
+func (h Hashicorp) getJobRequirements(e *colly.HTMLElement) []string {
 	requirements := []string{}
 	e.ForEach("li", func(_ int, el *colly.HTMLElement) {
 		requirements = append(requirements, el.Text)
 	})
 
-	fmt.Println(requirements)
+	return requirements
+}
 
-	return requirements, nil
+func (h Hashicorp) getJobLocation(e *colly.HTMLElement) string {
+
+	return strings.TrimSpace(e.Text)
+}
+
+func (h Hashicorp) getJobType(e *colly.HTMLElement) string {
+
+	return "Permanent"
+}
+
+func (h Hashicorp) getJobURL(r *colly.Request) string {
+	return r.URL.String()
+}
+
+func (h Hashicorp) getJobTitle(e *colly.HTMLElement) string {
+	return strings.TrimSpace(e.Text)
+}
+
+func (h Hashicorp) getJobSalary(e *colly.HTMLElement) string {
+	return "N/A"
 }
