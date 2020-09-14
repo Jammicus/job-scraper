@@ -93,7 +93,7 @@ func TestGetJobLocationApple(t *testing.T) {
 	assert.Equal(t, "Cambridge, Cambridgeshire, United Kingdom", result)
 }
 
-func TestGetRequirementsApple(t *testing.T) {
+func TestGetJobRequirementsApple(t *testing.T) {
 	expected := []string{
 		"Experience building applications/services with Python / Java / Scala",
 		"Strong background in building scalable and fault-tolerant distributed systems, particularly in realtime environments.",
@@ -134,11 +134,97 @@ func TestGetRequirementsApple(t *testing.T) {
 		}
 	})
 
-	result, err := a.getRequirements(elements[0])
+	result, err := a.getJobRequirements(elements[0])
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	assert.Equal(t, expected, result)
+}
+
+// Test via the gatherSpecs method for now.
+// TODO: Refactor test to use colly.Request
+func TestGetJobURLApple(t *testing.T) {
+	logger, err := zap.NewDevelopment()
+	defer logger.Sync()
+	sugar := logger.Sugar()
+	if err != nil {
+		sugar.Fatalf("Unable to create logger")
+	}
+
+	ts := jobs.StartTestServer("../../testdata/companies/apple-job.html")
+	defer ts.Close()
+
+	a := Apple{
+		URL: ts.URL + "/job",
+	}
+
+	result, err := a.gatherSpecs(a.URL, logger)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, ts.URL+"/job", result.URL)
+}
+
+func TestGetJobTitleApple(t *testing.T) {
+	ctx := &colly.Context{}
+	resp := &colly.Response{
+		Request: &colly.Request{
+			Ctx: ctx,
+		},
+		Ctx: ctx,
+	}
+	a := Apple{
+		URL: "",
+	}
+
+	file, err := os.Open("../../testdata/companies/apple-job.html")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(file)
+	sel := "h1"
+	elements := []*colly.HTMLElement{}
+	i := 0
+	doc.Find(sel).Each(func(_ int, s *goquery.Selection) {
+		for _, n := range s.Nodes {
+			elements = append(elements, colly.NewHTMLElementFromSelectionNode(resp, s, n, i))
+			i++
+		}
+	})
+
+	result := a.getJobTitle(elements[0])
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	assert.Equal(t, "AI/ML - Software Engineer (Python, Spark) - ML Platform & Technologies", result)
+}
+
+func TestGetJobTypeApple(t *testing.T) {
+
+	a := Apple{
+		URL: "",
+	}
+
+	result := a.getJobType(nil)
+
+	assert.Equal(t, "N/A", result)
+}
+
+func TestGetJobSalaryApple(t *testing.T) {
+
+	a := Apple{
+		URL: "",
+	}
+
+	result := a.getJobSalary(nil)
+
+	assert.Equal(t, "N/A", result)
 }

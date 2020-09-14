@@ -100,19 +100,20 @@ func (a Apple) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 	d.Visit(url)
 
 	d.OnRequest(func(r *colly.Request) {
-		sugar.Debugf("Visiting page %v", r.URL.String())
-		job.URL = r.URL.String()
+		url := a.getJobURL(r)
+		sugar.Debugf("Visiting page %v", url)
+		job.URL = url
 	})
 
 	d.OnHTML("h1", func(e *colly.HTMLElement) {
-		job.Title = e.Text
+		job.Title = a.getJobTitle(e)
 
 	})
 
 	d.OnHTML("#accordion_keyqualifications", func(e *colly.HTMLElement) {
 		var err error
 
-		job.Requirements, err = a.getRequirements(e)
+		job.Requirements, err = a.getJobRequirements(e)
 
 		if err != nil {
 			log.Fatal(err)
@@ -132,8 +133,8 @@ func (a Apple) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 	})
 
 	// Type and salary not provided.
-	job.Type = "N/A"
-	job.Salary = "N/A"
+	job.Type = a.getJobType(nil)
+	job.Salary = a.getJobSalary(nil)
 
 	d.Wait()
 	sugar.Debugf("Job details found %v", job)
@@ -148,7 +149,7 @@ func (a Apple) getJobLocation(e *colly.HTMLElement) (string, error) {
 	return location, nil
 }
 
-func (a Apple) getRequirements(e *colly.HTMLElement) ([]string, error) {
+func (a Apple) getJobRequirements(e *colly.HTMLElement) ([]string, error) {
 
 	requirements := []string{}
 	e.ForEach("li", func(_ int, el *colly.HTMLElement) {
@@ -156,4 +157,20 @@ func (a Apple) getRequirements(e *colly.HTMLElement) ([]string, error) {
 	})
 
 	return requirements, nil
+}
+
+func (a Apple) getJobURL(r *colly.Request) string {
+	return r.URL.String()
+}
+
+func (a Apple) getJobTitle(e *colly.HTMLElement) string {
+	return e.Text
+}
+
+func (a Apple) getJobType(e *colly.HTMLElement) string {
+	return "N/A"
+}
+
+func (a Apple) getJobSalary(e *colly.HTMLElement) string {
+	return "N/A"
 }
