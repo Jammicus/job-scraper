@@ -70,6 +70,10 @@ func (g *Google) findJobs(logger *zap.Logger) {
 
 		resp, err := http.Get(pagnatedURL)
 
+		if err != nil {
+			sugar.Errorf("Error access pagnated URL: %v", err)
+		}
+
 		responseData, err := ioutil.ReadAll(resp.Body)
 		err = json.Unmarshal(responseData, &gAPI)
 

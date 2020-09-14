@@ -58,6 +58,10 @@ func (a *Amazon) findJobs(logger *zap.Logger) {
 	responseData, err := ioutil.ReadAll(resp.Body)
 	err = json.Unmarshal(responseData, &aAPI)
 
+	if err != nil {
+		sugar.Errorf("Error unmarshalling JSON: %v", err)
+	}
+
 	a.Jobs = a.gatherSpecs(aAPI, logger)
 
 	if err != nil {
