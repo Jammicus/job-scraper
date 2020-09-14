@@ -83,28 +83,29 @@ func (dr DirectLine) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, erro
 	d.Visit(url)
 
 	d.OnRequest(func(r *colly.Request) {
-		sugar.Debugf("Visiting page %v", r.URL.String())
-		job.URL = r.URL.String()
-	})
 
-	d.OnHTML("h1", func(e *colly.HTMLElement) {
-		job.Title = strings.TrimSpace(e.Text)
-
+		url := dr.getJobURL(r)
+		sugar.Debugf("Visiting page %v", url)
+		job.URL = url
 	})
 
 	d.OnHTML("div.job-container", func(e *colly.HTMLElement) {
 
-		job.Requirements, err = dr.getRequirements(e)
+		job.Requirements, err = dr.getJobRequirements(e)
 		if err != nil {
 			sugar.Errorf("Error geting job requiremnts %v", zap.Error(err))
 		}
 
 	})
 	d.OnHTML("div.location.map-ico-black", func(e *colly.HTMLElement) {
-		job.Location, err = dr.getJobLocation(e)
-		if err != nil {
-			sugar.Errorf("Error geting job location %v", zap.Error(err))
-		}
+		job.Location = dr.getJobLocation(e)
+
+	})
+
+	d.OnHTML("div.top", func(e *colly.HTMLElement) {
+
+		job.Title = dr.getJobTitle(e)
+
 	})
 
 	// Not returning job type
@@ -116,13 +117,13 @@ func (dr DirectLine) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, erro
 	})
 
 	// Doesnt tell us salary on their job pages.
-	job.Salary = "N/A"
+	job.Salary = dr.getJobSalary(nil)
 	d.Wait()
 
 	return job, nil
 }
 
-func (dr DirectLine) getRequirements(e *colly.HTMLElement) ([]string, error) {
+func (dr DirectLine) getJobRequirements(e *colly.HTMLElement) ([]string, error) {
 	requirements := []string{}
 	e.ForEach("li", func(_ int, el *colly.HTMLElement) {
 		requirements = append(requirements, el.Text)
@@ -131,9 +132,9 @@ func (dr DirectLine) getRequirements(e *colly.HTMLElement) ([]string, error) {
 	return requirements, nil
 }
 
-func (dr DirectLine) getJobLocation(e *colly.HTMLElement) (string, error) {
+func (dr DirectLine) getJobLocation(e *colly.HTMLElement) string {
 
-	return e.ChildText("span"), nil
+	return e.ChildText("span")
 }
 
 func (dr DirectLine) getJobType(e *colly.HTMLElement) (string, error) {
@@ -147,4 +148,16 @@ func (dr DirectLine) getJobType(e *colly.HTMLElement) (string, error) {
 	})
 
 	return jobType, nil
+}
+
+func (dr DirectLine) getJobURL(r *colly.Request) string {
+	return r.URL.String()
+}
+
+func (dr DirectLine) getJobTitle(e *colly.HTMLElement) string {
+	return strings.TrimSpace(e.Text)
+}
+
+func (dr DirectLine) getJobSalary(e *colly.HTMLElement) string {
+	return "N/A"
 }
