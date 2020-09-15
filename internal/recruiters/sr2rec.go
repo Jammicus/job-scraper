@@ -16,7 +16,6 @@ var srURL = "https://www.sr2rec.co.uk/jobs/?jf_what=&jf_where=London"
 // SR2 is a JobSource
 type SR2 jobs.JobSource
 
-
 // GetJobs returns all jobs  for a given receiver
 func (sr SR2) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(sr.Jobs) == 0 {

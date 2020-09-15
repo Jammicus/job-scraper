@@ -10,7 +10,6 @@ import (
 	"go.uber.org/zap"
 )
 
-
 // Hashicorp is a JobSource=
 type Hashicorp jobs.JobSource
 
@@ -27,7 +26,6 @@ func (h Hashicorp) GetJobs(logger *zap.Logger) []jobs.Job {
 func (h Hashicorp) GetPath() string {
 	return h.FilePath
 }
-
 
 // GetJobs returns all jobs  for a given receiver
 func (h *Hashicorp) findJobs(logger *zap.Logger) {
