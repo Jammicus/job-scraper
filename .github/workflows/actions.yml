@@ -19,7 +19,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Build Code
-      run: go build cmd/main.go
+      run: go build cmd/jobs.go
     - name: Test
       run: go test ./... -v
   run:
@@ -33,7 +33,7 @@ jobs:
     - name: "Checkout code"
       uses: actions/checkout@v2
     - name: Run Program
-      run: go run cmd/main.go
+      run: go run cmd/jobs.go
     - name: Upload CSV
       uses: actions/upload-artifact@v2
       with:

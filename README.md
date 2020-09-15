@@ -14,7 +14,7 @@ As someone who works in automating everything, this project aims to webscape var
 In cmd/main.go, there are default base pages for each site to start scraping from. To run with these defaults:
 
 ```
-go run cmd/main.go
+go run cmd/jobs.go
 ```
 
 ## Outputs
