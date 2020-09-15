@@ -195,17 +195,38 @@ func TestGetJobURLDirectline(t *testing.T) {
 	ts := jobs.StartTestServer("../../testdata/companies/directline-job.html")
 	defer ts.Close()
 
-	a := Apple{
+	dr := DirectLine{
 		URL: ts.URL + "/job",
 	}
+	expected := jobs.Job{
+		Title:    "Senior DevOps Engineer (Cloud Provisioning & Access Management)",
+		Type:     "Permanent",
+		Salary:   "N/A",
+		Location: "Churchill Court, Bromley, BR1 1DP",
+		URL:      ts.URL + "/job",
+		Requirements: []string{
+			"Providing your expertise to build core services to be consumed by Projects (e.g. landing zones, Security controls, governance automation & Core networking) to cloud best practice.",
+			"Liaising with projects to help them consume services in an appropriate and governed manner",
+			"Working with internal and external suppliers to design and build the configuration management, release, deployment and operations cycle to meet business requirements.",
+			"Amplifying feedback loops - and increase the frequency - through the automation",
+			"Working with Architecture, Security and Other key teams to create pattern based best practice approaches to delivery.",
+			"Identifying and implementing opportunities for innovation and continuous improvement in the development and continuous deployment of applications.",
+			"Terraform, Cloud formation and Python - essential",
+			"Excellent AWS skills – both depth and breadth of services – Certified preferred",
+			"Clear and opinionated understanding of cloud (AWS) best practice",
+			"Understanding of security and governance in the Cloud using native services – preferred",
+			"Usage and implementation of CI/CD pipelines to deliver continuous improvement - essential",
+			"Excellent written, and verbal communication skills",
+		},
+	}
 
-	result, err := a.gatherSpecs(a.URL, logger)
+	result, err := dr.gatherSpecs(dr.URL, logger)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, ts.URL+"/job", result.URL)
+	assert.Equal(t, expected.URL, result.URL)
 }
 
 func TestGetJobTitleDirectline(t *testing.T) {
