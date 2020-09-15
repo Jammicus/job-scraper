@@ -40,8 +40,6 @@ func (dr *DirectLine) findJobs(logger *zap.Logger) {
 		sugar.Fatal(err)
 	}
 
-	sugar.Debugf("Site %v is accessible", dr.URL)
-
 	c.OnHTML("div.card.grid__item", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.ChildAttr("a", "href"))
 		sugar.Infof("Looking for jobs at: %v", link)
@@ -50,13 +48,13 @@ func (dr *DirectLine) findJobs(logger *zap.Logger) {
 		if err != nil {
 			sugar.Error(zap.Error(err))
 		}
-		sugar.Infof("Job successfully scraped at: %v", link)
+		sugar.Infof("Job successfully scraped with title: %v", job.Title)
 		foundJobs = append(foundJobs, job)
 	})
 
 	c.OnHTML("a.icon-right-ico.pagination__right-nav", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.Attr("href"))
-		sugar.Infof("Next page link found: %v", link)
+		sugar.Debugf("Next page link found: %v", link)
 		e.Request.Visit(link)
 	})
 
@@ -119,6 +117,8 @@ func (dr DirectLine) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, erro
 	// Doesnt tell us salary on their job pages.
 	job.Salary = dr.getJobSalary(nil)
 	d.Wait()
+
+	sugar.Debugf("Job details found %v", job)
 
 	return job, nil
 }

@@ -96,6 +96,9 @@ func (g *Google) findJobs(logger *zap.Logger) {
 				sugar.Error(zap.Error(err))
 			}
 			jobSet, err := g.gatherSpecs(gJob, logger)
+
+			sugar.Infof("Job successfully scraped with title: %v", jobSet.Title)
+
 			jobs = append(jobs, jobSet)
 
 		}
@@ -135,7 +138,7 @@ func (g Google) gatherSpecs(gJob googleJob, logger *zap.Logger) (jobs.Job, error
 
 	job.Location = g.getJobLocation(gJob)
 
-	sugar.Debugf("Found Google job %v", job)
+	sugar.Debugf("Job details found %v", job)
 
 	return job, nil
 }

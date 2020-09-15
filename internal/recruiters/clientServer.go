@@ -46,8 +46,6 @@ func (cs *ClientServer) findJobs(logger *zap.Logger) {
 		sugar.Fatal(err)
 	}
 
-	sugar.Debugf("Site %v is accessible", cs.URL)
-
 	c.OnHTML("li.job-result-item", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.ChildAttr("a", "href"))
 		sugar.Infof("Looking for jobs at: %v", link)
@@ -56,13 +54,13 @@ func (cs *ClientServer) findJobs(logger *zap.Logger) {
 		if err != nil {
 			sugar.Error(zap.Error(err))
 		}
-		sugar.Infof("Job successfully scraped at: %v", link)
+		sugar.Infof("Job successfully scraped with title: %v", job.Title)
 		foundJobs = append(foundJobs, job)
 	})
 
 	c.OnHTML(".next", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.ChildAttr("a", "href"))
-		sugar.Infof("Next page link found: %v", link)
+		sugar.Debugf("Next page link found: %v", link)
 		e.Request.Visit(link)
 	})
 

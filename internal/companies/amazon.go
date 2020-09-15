@@ -70,6 +70,7 @@ func (a *Amazon) findJobs(logger *zap.Logger) {
 }
 
 func (a Amazon) gatherSpecs(aAPI amazonAPI, logger *zap.Logger) []jobs.Job {
+	sugar := logger.Sugar()
 	foundJobs := []jobs.Job{}
 	for _, item := range aAPI.Jobs {
 		job := jobs.Job{}
@@ -79,6 +80,9 @@ func (a Amazon) gatherSpecs(aAPI amazonAPI, logger *zap.Logger) []jobs.Job {
 		job.Requirements = a.getJobRequirements(item)
 		job.Salary = a.getJobSalary(item)
 		job.Location = a.getJobLocation(item)
+
+		sugar.Infof("Job successfully scraped with title: %v", job.Title)
+		sugar.Debugf("Job details found %v", job)
 
 		foundJobs = append(foundJobs, job)
 	}

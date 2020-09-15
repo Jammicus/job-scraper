@@ -43,14 +43,12 @@ func (a *Apple) findJobs(logger *zap.Logger) {
 		sugar.Fatal(err)
 	}
 
-	sugar.Debugf("Site %v is accessible", a.URL)
-
 	c.OnHTML("tbody", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.ChildAttr("a", "href"))
 		sugar.Infof("Looking for jobs at: %v", link)
 
 		job, err := a.gatherSpecs(link, logger)
-		sugar.Infof("Job successfully scraped at: %v", link)
+		sugar.Infof("Job successfully scraped with title: %v", job.Title)
 
 		if err != nil {
 			sugar.Error(zap.Error(err))
@@ -73,7 +71,7 @@ func (a *Apple) findJobs(logger *zap.Logger) {
 		}
 
 		pageNum = pageNum + 1
-		sugar.Infof("Next page link found: %v", link)
+		sugar.Debugf("Next page link found: %v", link)
 		e.Request.Visit(link)
 
 	})

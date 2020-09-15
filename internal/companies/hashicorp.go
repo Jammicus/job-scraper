@@ -37,8 +37,6 @@ func (h *Hashicorp) findJobs(logger *zap.Logger) {
 		sugar.Fatal(err)
 	}
 
-	sugar.Debugf("Site %v is accessible", h.URL)
-
 	c.OnHTML(".item", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.ChildAttr("a", "href"))
 		sugar.Infof("Looking for jobs at: %v", link)
@@ -47,7 +45,7 @@ func (h *Hashicorp) findJobs(logger *zap.Logger) {
 		if err != nil {
 			sugar.Error(zap.Error(err))
 		}
-		sugar.Infof("Job successfully scraped at: %v", link)
+		sugar.Infof("Job successfully scraped with title: %v", job.Title)
 		foundJobs = append(foundJobs, job)
 	})
 
@@ -97,6 +95,9 @@ func (h Hashicorp) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error)
 	job.Salary = h.getJobSalary(nil)
 	job.Type = h.getJobType(nil)
 	d.Wait()
+
+	sugar.Debugf("Job details found %v", job)
+
 	return job, nil
 }
 
