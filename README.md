@@ -27,6 +27,12 @@ https://github.com/Jammicus/job-scraper/actions
 
 If you are reading this and feel there could be improvements, please do let me know. Small personal projects are hard to get code reviewed so all feedback is appreciated
 
+
+## Knowing Issues
+
+* Occasionally, the HTTP test server used to serve the test files does not return a URL in the tests.
+* Ocassionally jobs are not returned due to differences in the format that they were uploaded to the given website. This project aims at getting the most common job formats. This only occurs on datasources that are not being collected from a API. This is currently being investigated 
+
 ## Contact
 
 If you are interesting in working with me, you can find my CV at: https://github.com/Jammicus/CV-Generator/releases
