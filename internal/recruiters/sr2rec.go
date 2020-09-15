@@ -13,8 +13,11 @@ import (
 
 var srURL = "https://www.sr2rec.co.uk/jobs/?jf_what=&jf_where=London"
 
+// SR2 is a JobSource
 type SR2 jobs.JobSource
 
+
+// GetJobs returns all jobs  for a given receiver
 func (sr SR2) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(sr.Jobs) == 0 {
 		sugar := logger.Sugar()
@@ -24,6 +27,7 @@ func (sr SR2) GetJobs(logger *zap.Logger) []jobs.Job {
 	return sr.Jobs
 }
 
+// GetPath returns the filepath to write the CSV to for a given receiver
 func (sr SR2) GetPath() string {
 	return sr.FilePath
 }
@@ -123,6 +127,11 @@ func (sr SR2) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 	})
 
 	d.Wait()
+
+	if len(job.Requirements) == 0 {
+		return jobs.Job{}, fmt.Errorf("No requirements found for job %v", job.URL)
+	}
+
 	sugar.Debugf("Job details found %v", job)
 	return job, nil
 }

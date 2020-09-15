@@ -1,6 +1,7 @@
 package companies
 
 import (
+	"fmt"
 	jobs "job-scraper/internal"
 	"strings"
 	"time"
@@ -9,6 +10,8 @@ import (
 	"go.uber.org/zap"
 )
 
+
+// Hashicorp is a JobSource=
 type Hashicorp jobs.JobSource
 
 func (h Hashicorp) GetJobs(logger *zap.Logger) []jobs.Job {
@@ -20,10 +23,13 @@ func (h Hashicorp) GetJobs(logger *zap.Logger) []jobs.Job {
 	return h.Jobs
 }
 
+// GetPath returns the filepath to write the CSV to for a given receiver
 func (h Hashicorp) GetPath() string {
 	return h.FilePath
 }
 
+
+// GetJobs returns all jobs  for a given receiver
 func (h *Hashicorp) findJobs(logger *zap.Logger) {
 	sugar := logger.Sugar()
 	foundJobs := []jobs.Job{}
@@ -95,6 +101,10 @@ func (h Hashicorp) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error)
 	job.Salary = h.getJobSalary(nil)
 	job.Type = h.getJobType(nil)
 	d.Wait()
+
+	if len(job.Requirements) == 0 {
+		return jobs.Job{}, fmt.Errorf("No requirements found for job %v", job.URL)
+	}
 
 	sugar.Debugf("Job details found %v", job)
 

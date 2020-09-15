@@ -2,6 +2,7 @@ package companies
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	jobs "job-scraper/internal"
 	"net/http"
@@ -39,8 +40,10 @@ type googleJob struct {
 	} `json:"locations"`
 }
 
+// Google is a JobSource
 type Google jobs.JobSource
 
+// GetJobs returns all jobs  for a given receiver
 func (g Google) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(g.Jobs) == 0 {
 		sugar := logger.Sugar()
@@ -50,6 +53,7 @@ func (g Google) GetJobs(logger *zap.Logger) []jobs.Job {
 	return g.Jobs
 }
 
+// GetPath returns the filepath to write the CSV to for a given receiver
 func (g Google) GetPath() string {
 	return g.FilePath
 }
@@ -137,6 +141,10 @@ func (g Google) gatherSpecs(gJob googleJob, logger *zap.Logger) (jobs.Job, error
 	job.Salary = g.getJobSalary(gJob)
 
 	job.Location = g.getJobLocation(gJob)
+
+	if len(job.Requirements) == 0 {
+		return jobs.Job{}, fmt.Errorf("No requirements found for job %v", job.URL)
+	}
 
 	sugar.Debugf("Job details found %v", job)
 

@@ -39,7 +39,7 @@ func (a Amazon) GetJobs(logger *zap.Logger) []jobs.Job {
 	return a.Jobs
 }
 
-// GetPath returns the file path specified for a given receiver
+// GetPath returns the filepath to write the CSV to for a given receiver
 func (a Amazon) GetPath() string {
 	return a.FilePath
 }

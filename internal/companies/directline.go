@@ -1,6 +1,7 @@
 package companies
 
 import (
+	"fmt"
 	jobs "job-scraper/internal"
 	"strings"
 	"time"
@@ -9,8 +10,10 @@ import (
 	"go.uber.org/zap"
 )
 
+// DirectLine is a JobSource
 type DirectLine jobs.JobSource
 
+// GetJobs returns all jobs  for a given receiver
 func (dr DirectLine) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(dr.Jobs) == 0 {
 		sugar := logger.Sugar()
@@ -20,6 +23,7 @@ func (dr DirectLine) GetJobs(logger *zap.Logger) []jobs.Job {
 	return dr.Jobs
 }
 
+// GetPath returns the filepath to write the CSV to for a given receiver
 func (dr DirectLine) GetPath() string {
 	return dr.FilePath
 }
@@ -117,6 +121,10 @@ func (dr DirectLine) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, erro
 	// Doesnt tell us salary on their job pages.
 	job.Salary = dr.getJobSalary(nil)
 	d.Wait()
+
+	if len(job.Requirements) == 0 {
+		return jobs.Job{}, fmt.Errorf("No requirements found for job %v", job.URL)
+	}
 
 	sugar.Debugf("Job details found %v", job)
 

@@ -1,6 +1,7 @@
 package companies
 
 import (
+	"fmt"
 	jobs "job-scraper/internal"
 	"log"
 	"strconv"
@@ -11,10 +12,12 @@ import (
 	"go.uber.org/zap"
 )
 
+// Apple is a JobSource
 type Apple jobs.JobSource
 
 //https://jobs.apple.com/en-gb/search?location=united-kingdom-GBR&team=apps-and-frameworks-SFTWR-AF+cloud-and-infrastructure-SFTWR-CLD+core-operating-systems-SFTWR-COS+devops-and-site-reliability-SFTWR-DSR+engineering-project-management-SFTWR-EPM+information-systems-and-technology-SFTWR-ISTECH+machine-learning-and-ai-SFTWR-MCHLN+security-and-privacy-SFTWR-SEC+software-quality-automation-and-tools-SFTWR-SQAT+wireless-software-SFTWR-WSFT
 
+// GetJobs returns all jobs  for a given receiver
 func (a Apple) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(a.Jobs) == 0 {
 		sugar := logger.Sugar()
@@ -24,6 +27,7 @@ func (a Apple) GetJobs(logger *zap.Logger) []jobs.Job {
 	return a.Jobs
 }
 
+// GetPath returns the filepath to write the CSV to for a given receiver
 func (a Apple) GetPath() string {
 	return a.FilePath
 }
@@ -135,6 +139,11 @@ func (a Apple) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, error) {
 	job.Salary = a.getJobSalary(nil)
 
 	d.Wait()
+
+	if len(job.Requirements) == 0 {
+		return jobs.Job{}, fmt.Errorf("No requirements found for job %v", job.URL)
+	}
+
 	sugar.Debugf("Job details found %v", job)
 	return job, nil
 }

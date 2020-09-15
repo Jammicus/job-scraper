@@ -18,8 +18,11 @@ var jobType = regexp.MustCompile(`^Job Type:`)
 var jobDetails = regexp.MustCompile(`£[0-9]+ - £[0-9]+`)
 var jobRequirements = regexp.MustCompile(`Requirements:\s*?[*]`)
 
+
+// ClientServer is a JobSource
 type ClientServer jobs.JobSource
 
+// GetJobs returns all jobs  for a given receiver
 func (cs ClientServer) GetJobs(logger *zap.Logger) []jobs.Job {
 	if len(cs.Jobs) == 0 {
 		sugar := logger.Sugar()
@@ -29,6 +32,7 @@ func (cs ClientServer) GetJobs(logger *zap.Logger) []jobs.Job {
 	return cs.Jobs
 }
 
+// GetPath returns the filepath to write the CSV to for a given receiver
 func (cs ClientServer) GetPath() string {
 	return cs.FilePath
 }
@@ -113,6 +117,7 @@ func (cs ClientServer) gatherSpecs(url string, logger *zap.Logger) (jobs.Job, er
 	})
 
 	d.Wait()
+
 
 	if len(job.Requirements) == 0 {
 		return jobs.Job{}, fmt.Errorf("No requirements found for job %v", job.URL)
