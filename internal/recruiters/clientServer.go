@@ -156,10 +156,6 @@ func (cs ClientServer) getJobSalary(s string) string {
 func (cs ClientServer) getJobRequirements(el *colly.HTMLElement) []string {
 	jobRequirement := regexp.MustCompile(`[^<br\/>][^<]*`)
 
-	fmt.Println("@@@@@@@@")
-	fmt.Println(el.Text)
-	fmt.Println("@@@@@@@@")
-
 	requirements := []string{}
 	el.DOM.Each(func(_ int, s *goquery.Selection) {
 		// Use <BR> To identify between requirements
