@@ -9,7 +9,7 @@ import (
 )
 
 // WriteToCSV takes a file path, a list of jobs and a logging instance and writes those jobs to the file at the path provided
-func WriteToCSV(j FindJobs, logger *zap.Logger) error {
+func WriteToCSV(j FindJobs, logger *zap.Logger, c chan int) error {
 	sugar := logger.Sugar()
 
 	// create if does not exist, otherwise append
@@ -49,6 +49,7 @@ func WriteToCSV(j FindJobs, logger *zap.Logger) error {
 	}
 	sugar.Infof("Finished writing content to file %v", fInfo.Name())
 
+	c <- 0
 	return nil
 }
 
