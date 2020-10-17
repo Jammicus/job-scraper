@@ -12,6 +12,13 @@ import (
 	"go.uber.org/zap"
 )
 
+var testServerURLUnderstanding string
+
+func init() {
+	testServer := jobs.StartTestServer("../../testdata/recruiters/understanding-job.html")
+	testServerURLUnderstanding = testServer.URL + "/job"
+}
+
 func TestGatherSpecsUnderstanding(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
@@ -20,18 +27,15 @@ func TestGatherSpecsUnderstanding(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/recruiters/understanding-job.html")
-	defer ts.Close()
-
 	understanding := Understanding{
-		URL: ts.URL + "/job",
+		URL: testServerURLUnderstanding,
 	}
 	expected := jobs.Job{
 		Title:    "DevOps Engineer (Green Energy)",
 		Type:     "Permanent",
 		Salary:   "£80000 - £95000 per annum + benefits",
 		Location: "London, England",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLUnderstanding,
 		Requirements: []string{
 			"Strong technical capabilities and an ability to work within GCP or AWS cloud",
 			"Experience with production container tools including Kubernetes and Docker",
@@ -241,18 +245,15 @@ func TestGetJobURLUnderstanding(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/recruiters/understanding-job.html")
-	defer ts.Close()
-
 	u := Understanding{
-		URL: ts.URL + "/job",
+		URL: testServerURLUnderstanding,
 	}
 	expected := jobs.Job{
 		Title:    "DevOps Engineer (Green Energy)",
 		Type:     "Permanent",
 		Salary:   "£80000 - £95000 per annum + benefits",
 		Location: "London, England",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLUnderstanding,
 		Requirements: []string{
 			"Strong technical capabilities and an ability to work within GCP or AWS cloud",
 			"Experience with production container tools including Kubernetes and Docker",

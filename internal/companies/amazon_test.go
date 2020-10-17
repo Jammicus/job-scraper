@@ -9,6 +9,13 @@ import (
 	"go.uber.org/zap"
 )
 
+var testServerURLAmazon string
+
+func init() {
+	testServer := jobs.StartTestServer("../../testdata/companies/amazon-job.json")
+	testServerURLAmazon = testServer.URL + "/job"
+}
+
 func TestFindJobsAmazon(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
@@ -17,11 +24,8 @@ func TestFindJobsAmazon(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/companies/amazon-job.json")
-	defer ts.Close()
-
 	a := Amazon{
-		URL: ts.URL + "/job",
+		URL: testServerURLAmazon,
 	}
 	expected := []jobs.Job{{
 		Title:    "Senior Consultant, Data Lake \u0026 Analytics",

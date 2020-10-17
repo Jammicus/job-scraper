@@ -12,6 +12,13 @@ import (
 	"go.uber.org/zap"
 )
 
+var testServerURLDL string
+
+func init() {
+	testServer := jobs.StartTestServer("../../testdata/companies/directline-job.html")
+	testServerURLDL = testServer.URL + "/job"
+}
+
 func TestGatherSpecsDirectline(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
@@ -20,18 +27,15 @@ func TestGatherSpecsDirectline(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/companies/directline-job.html")
-	defer ts.Close()
-
 	dr := DirectLine{
-		URL: ts.URL + "/job",
+		URL: testServerURLDL,
 	}
 	expected := jobs.Job{
 		Title:    "Senior DevOps Engineer (Cloud Provisioning & Access Management)",
 		Type:     "Permanent",
 		Salary:   "N/A",
 		Location: "Churchill Court, Bromley, BR1 1DP",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLDL,
 		Requirements: []string{
 			"Providing your expertise to build core services to be consumed by Projects (e.g. landing zones, Security controls, governance automation & Core networking) to cloud best practice.",
 			"Liaising with projects to help them consume services in an appropriate and governed manner",
@@ -192,18 +196,15 @@ func TestGetJobURLDirectline(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/companies/directline-job.html")
-	defer ts.Close()
-
 	dr := DirectLine{
-		URL: ts.URL + "/job",
+		URL: testServerURLDL,
 	}
 	expected := jobs.Job{
 		Title:    "Senior DevOps Engineer (Cloud Provisioning & Access Management)",
 		Type:     "Permanent",
 		Salary:   "N/A",
 		Location: "Churchill Court, Bromley, BR1 1DP",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLDL,
 		Requirements: []string{
 			"Providing your expertise to build core services to be consumed by Projects (e.g. landing zones, Security controls, governance automation & Core networking) to cloud best practice.",
 			"Liaising with projects to help them consume services in an appropriate and governed manner",

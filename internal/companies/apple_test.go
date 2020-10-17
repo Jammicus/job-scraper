@@ -12,6 +12,13 @@ import (
 	"go.uber.org/zap"
 )
 
+var testServerURLApple string
+
+func init() {
+	testServer := jobs.StartTestServer("../../testdata/companies/apple-job.html")
+	testServerURLApple = testServer.URL + "/job"
+}
+
 func TestGatherSpecsApple(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
@@ -20,18 +27,15 @@ func TestGatherSpecsApple(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/companies/apple-job.html")
-	defer ts.Close()
-
 	a := Apple{
-		URL: ts.URL + "/job",
+		URL: testServerURLApple,
 	}
 	expected := jobs.Job{
 		Title:    "AI/ML - Software Engineer (Python, Spark) - ML Platform & Technologies",
 		Type:     "N/A",
 		Salary:   "N/A",
 		Location: "Cambridge, Cambridgeshire, United Kingdom",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLApple,
 		Requirements: []string{
 			"Experience building applications/services with Python / Java / Scala",
 			"Strong background in building scalable and fault-tolerant distributed systems, particularly in realtime environments.",
@@ -153,11 +157,8 @@ func TestGetJobURLApple(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/companies/apple-job.html")
-	defer ts.Close()
-
 	a := Apple{
-		URL: ts.URL + "/job",
+		URL: testServerURLApple,
 	}
 
 	result, err := a.gatherSpecs(a.URL, logger)
@@ -166,7 +167,7 @@ func TestGetJobURLApple(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, ts.URL+"/job", result.URL)
+	assert.Equal(t, testServerURLApple, result.URL)
 }
 
 func TestGetJobTitleApple(t *testing.T) {

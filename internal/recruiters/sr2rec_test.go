@@ -13,6 +13,13 @@ import (
 	"go.uber.org/zap"
 )
 
+var testServerURLSR2 string
+
+func init() {
+	testServer := jobs.StartTestServer("../../testdata/recruiters/sr2rec-job.html")
+	testServerURLSR2 = testServer.URL + "/job"
+}
+
 func TestGatherSpecsSR2(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
@@ -21,18 +28,15 @@ func TestGatherSpecsSR2(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/recruiters/sr2rec-job.html")
-	defer ts.Close()
-
 	sr := SR2{
-		URL: ts.URL + "/job",
+		URL: testServerURLSR2,
 	}
 	expected := jobs.Job{
 		Title:    "Lead Java Developer – SC Cleared",
 		Type:     "Contract",
 		Salary:   "£400 - £500",
 		Location: "London",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLSR2,
 		Requirements: []string{
 			"Java 8+",
 			"RESTful APIs",
@@ -254,18 +258,15 @@ func TestGetJobURLSR2(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/recruiters/sr2rec-job.html")
-	defer ts.Close()
-
 	sr := SR2{
-		URL: ts.URL + "/job",
+		URL: testServerURLSR2,
 	}
 	expected := jobs.Job{
 		Title:    "Lead Java Developer – SC Cleared",
 		Type:     "Contract",
 		Salary:   "£400 - £500",
 		Location: "London",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLSR2,
 		Requirements: []string{
 			"Java 8+",
 			"RESTful APIs",

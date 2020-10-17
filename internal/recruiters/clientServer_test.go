@@ -12,6 +12,13 @@ import (
 	"go.uber.org/zap"
 )
 
+var testServerURLCS string
+
+func init() {
+	testServer := jobs.StartTestServer("../../testdata/recruiters/clientserver-job.html")
+	testServerURLCS = testServer.URL + "/job"
+}
+
 func TestGatherSpecsClientServer(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
@@ -20,18 +27,15 @@ func TestGatherSpecsClientServer(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/recruiters/clientserver-job.html")
-	defer ts.Close()
-
 	cs := ClientServer{
-		URL: ts.URL + "/job",
+		URL: testServerURLCS,
 	}
 	expected := jobs.Job{
 		Title:    "Lead JavaScript Developer - React TypeScript",
 		Type:     "Permanent",
 		Salary:   "£70000 - £95000",
 		Location: "London, England",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLCS,
 		Requirements: []string{
 			"You have strong commercial experience as a Front End Developer with all of the following: JavaScript, React, Redux and TypeScript ",
 			"You have experience of building user interfaces on top of RESTful APIs",
@@ -40,7 +44,7 @@ func TestGatherSpecsClientServer(t *testing.T) {
 			"You&#39;re degree educated in a STEM subject",
 		}}
 
-	result, err := cs.gatherSpecs(ts.URL+"/job", logger)
+	result, err := cs.gatherSpecs(testServerURLCS, logger)
 
 	if err != nil {
 		log.Fatal(err)
@@ -137,14 +141,14 @@ func TestGetJobRequirementsClientServer(t *testing.T) {
 	defer ts.Close()
 
 	cs := ClientServer{
-		URL: ts.URL + "/job",
+		URL: testServerURLCS,
 	}
 	expected := jobs.Job{
 		Title:    "Lead JavaScript Developer - React TypeScript",
 		Type:     "Permanent",
 		Salary:   "£70000 - £95000",
 		Location: "London, England",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLCS,
 		Requirements: []string{
 			"You have strong commercial experience as a Front End Developer with all of the following: JavaScript, React, Redux and TypeScript ",
 			"You have experience of building user interfaces on top of RESTful APIs",
@@ -176,14 +180,14 @@ func TestGetJobURLClientServer(t *testing.T) {
 	defer ts.Close()
 
 	cs := ClientServer{
-		URL: ts.URL + "/job",
+		URL: testServerURLCS,
 	}
 	expected := jobs.Job{
 		Title:    "Lead Java Developer – SC Cleared",
 		Type:     "Contract",
 		Salary:   "£400 - £500",
 		Location: "London",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLCS,
 		Requirements: []string{
 			"Java 8+",
 			"RESTful APIs",

@@ -12,6 +12,13 @@ import (
 	"go.uber.org/zap"
 )
 
+var testServerURLHashi string
+
+func init() {
+	testServer := jobs.StartTestServer("../../testdata/companies/hashicorp-job.html")
+	testServerURLHashi = testServer.URL + "/job"
+}
+
 func TestGatherSpecsHashicorp(t *testing.T) {
 	logger, err := zap.NewDevelopment()
 	defer logger.Sync()
@@ -20,18 +27,15 @@ func TestGatherSpecsHashicorp(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/companies/hashicorp-job.html")
-	defer ts.Close()
-
 	h := Hashicorp{
-		URL: ts.URL + "/job",
+		URL: testServerURLHashi,
 	}
 	expected := jobs.Job{
 		Title:    "Site Reliability Engineer - Cloud Services",
 		Type:     "Permanent",
 		Salary:   "N/A",
 		Location: "United States (Remote)",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLHashi,
 		Requirements: []string{
 			"Design, implement, and maintain a secure and scalable infrastructure platform for delivering Cloud Services’ applications",
 			"Own and ensure that internal and external SLA’s meet and exceed expectations, System centric KPIs are continuously monitored and improved",
@@ -63,7 +67,7 @@ func TestGetJobRequirementsHashicorp(t *testing.T) {
 		Type:     "Permanent",
 		Salary:   "N/A",
 		Location: "United States (Remote)",
-		URL:      "" + "/job",
+		URL:      testServerURLHashi,
 		Requirements: []string{
 			"Design, implement, and maintain a secure and scalable infrastructure platform for delivering Cloud Services’ applications",
 			"Own and ensure that internal and external SLA’s meet and exceed expectations, System centric KPIs are continuously monitored and improved",
@@ -207,18 +211,15 @@ func TestGetJobURLHashicorp(t *testing.T) {
 		sugar.Fatalf("Unable to create logger")
 	}
 
-	ts := jobs.StartTestServer("../../testdata/companies/hashicorp-job.html")
-	defer ts.Close()
-
 	h := Hashicorp{
-		URL: ts.URL + "/job",
+		URL: testServerURLHashi,
 	}
 	expected := jobs.Job{
 		Title:    "Site Reliability Engineer - Cloud Services",
 		Type:     "Permanent",
 		Salary:   "N/A",
 		Location: "United States (Remote)",
-		URL:      ts.URL + "/job",
+		URL:      testServerURLHashi,
 		Requirements: []string{
 			"Design, implement, and maintain a secure and scalable infrastructure platform for delivering Cloud Services’ applications",
 			"Own and ensure that internal and external SLA’s meet and exceed expectations, System centric KPIs are continuously monitored and improved",
