@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	csv "job-scraper/internal"
 	companies "job-scraper/internal/companies"
 	recruiters "job-scraper/internal/recruiters"
@@ -58,13 +59,19 @@ func main() {
 		FilePath: "google.csv",
 	}
 
-	csv.WriteToCSV(g, logger)
-	csv.WriteToCSV(ap, logger)
-	csv.WriteToCSV(a, logger)
-	csv.WriteToCSV(hs, logger)
-	csv.WriteToCSV(dr, logger)
-	csv.WriteToCSV(understanding, logger)
-	csv.WriteToCSV(sr, logger)
-	csv.WriteToCSV(cs, logger)
+	c := make(chan int)
+
+	go csv.WriteToCSV(g, logger, c)
+	go csv.WriteToCSV(ap, logger, c)
+	go csv.WriteToCSV(a, logger, c)
+	go csv.WriteToCSV(hs, logger, c)
+	go csv.WriteToCSV(dr, logger, c)
+	go csv.WriteToCSV(understanding, logger,c)
+	go csv.WriteToCSV(sr, logger,c)
+	go csv.WriteToCSV(cs, logger,c)
+
+	for i := 0; i <= 7; i++ {
+		fmt.Println(<- c)
+	}
 
 }
