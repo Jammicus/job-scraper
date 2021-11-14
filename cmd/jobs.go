@@ -24,11 +24,6 @@ func main() {
 		FilePath: "understanding.csv",
 	}
 
-	sr := recruiters.SR2{
-		URL:      "https://www.sr2rec.co.uk/jobs/?jf_what=&jf_where=London",
-		FilePath: "sr2rec.csv",
-	}
-
 	cs := recruiters.ClientServer{
 		URL:      "https://www.client-server.com/jobs/london/",
 		FilePath: "clientServer.csv",
@@ -66,12 +61,11 @@ func main() {
 	go csv.WriteToCSV(a, logger, c)
 	go csv.WriteToCSV(hs, logger, c)
 	go csv.WriteToCSV(dr, logger, c)
-	go csv.WriteToCSV(understanding, logger,c)
-	go csv.WriteToCSV(sr, logger,c)
-	go csv.WriteToCSV(cs, logger,c)
+	go csv.WriteToCSV(understanding, logger, c)
+	go csv.WriteToCSV(cs, logger, c)
 
 	for i := 0; i <= 7; i++ {
-		fmt.Println(<- c)
+		fmt.Println(<-c)
 	}
 
 }
