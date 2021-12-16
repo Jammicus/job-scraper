@@ -49,14 +49,15 @@ func main() {
 		FilePath: "apple.csv",
 	}
 
-	g := companies.Google{
-		URL:      "https://careers.google.com/api/v2/jobs/search/?company=Google&company=Google%20Fiber&company=YouTube&employment_type=FULL_TIME&hl=en_US&jlo=en_US&location=London%2C%20UK&q=&sort_by=relevance",
-		FilePath: "google.csv",
-	}
+	// Bug that prevents code from terminating
+	// g := companies.Google{
+	// 	URL:      "https://careers.google.com/api/v2/jobs/search/?company=Google&company=Google%20Fiber&company=YouTube&employment_type=FULL_TIME&hl=en_US&jlo=en_US&location=London%2C%20UK&q=&sort_by=relevance",
+	// 	FilePath: "google.csv",
+	// }
 
 	c := make(chan int)
 
-	go csv.WriteToCSV(g, logger, c)
+	// go csv.WriteToCSV(g, logger, c)
 	go csv.WriteToCSV(ap, logger, c)
 	go csv.WriteToCSV(a, logger, c)
 	go csv.WriteToCSV(hs, logger, c)
@@ -64,7 +65,7 @@ func main() {
 	go csv.WriteToCSV(understanding, logger, c)
 	go csv.WriteToCSV(cs, logger, c)
 
-	for i := 0; i <= 7; i++ {
+	for i := 0; i < 6; i++ {
 		fmt.Println(<-c)
 	}
 
