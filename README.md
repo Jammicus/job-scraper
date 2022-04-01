@@ -32,3 +32,4 @@ If you are reading this and feel there could be improvements, please do let me k
 If you are interesting in working with me, you can find my CV at: https://github.com/Jammicus/CV-Generator/releases
 
 Alternatively, you can email me at: jamesmaxwalter@gmail.com
+
