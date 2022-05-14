@@ -29,10 +29,10 @@ func main() {
 		FilePath: "clientServer.csv",
 	}
 
-	dr := companies.DirectLine{
-		URL:      "https://www.directlinegroupcareers.com/search-apply/?jobcategory=ca77d4d22fb7013e872107cf18d65905&location=&keywords=&sortby=fj&distance=50&resultsperpage=12",
-		FilePath: "directLine.csv",
-	}
+	// dr := companies.DirectLine{
+	// 	URL:      "https://www.directlinegroupcareers.com/search-apply/?jobcategory=ca77d4d22fb7013e872107cf18d65905&location=&keywords=&sortby=fj&distance=50&resultsperpage=12",
+	// 	FilePath: "directLine.csv",
+	// }
 
 	hs := companies.Hashicorp{
 		URL:      "https://www.hashicorp.com/jobs/engineering",
@@ -61,7 +61,7 @@ func main() {
 	go csv.WriteToCSV(ap, logger, c)
 	go csv.WriteToCSV(a, logger, c)
 	go csv.WriteToCSV(hs, logger, c)
-	go csv.WriteToCSV(dr, logger, c)
+	// go csv.WriteToCSV(dr, logger, c)
 	go csv.WriteToCSV(understanding, logger, c)
 	go csv.WriteToCSV(cs, logger, c)
 
